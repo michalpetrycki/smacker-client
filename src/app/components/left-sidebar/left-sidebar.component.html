@@ -1,0 +1,14 @@
+<div class="left-sidebar">
+    <mat-nav-list *ngIf="navItems$ | async as navItems">
+        @for (link of navItems; track link) {
+        <a [routerLink]="'/recipes/category/' + link.route" routerLinkActive #rla="routerLinkActive"
+            [activated]="rla.isActive" mat-list-item>
+            {{ link.displayName }}
+        </a>
+        <p (click)="removeCategory(link)" style="color: green;">XXXXXX</p>
+        }
+    </mat-nav-list>
+</div>
+<div>
+    <button (click)="addCategory()">Add category</button>
+</div>

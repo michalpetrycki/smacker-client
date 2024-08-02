@@ -1,0 +1,115 @@
+<mat-stepper orientation="horizontal" linear="false" #stepper>
+    <mat-step [stepControl]="detailsFormGroup">
+        <form [formGroup]="detailsFormGroup">
+            <ng-template matStepLabel>Fill out name and description</ng-template>
+            <ng-container>
+                @for (formControl of detailsGroupControls; track formControl) {
+                <mat-form-field>
+                    <mat-label>{{formControl.name}}</mat-label>
+                    <input matInput placeholder="abcd" [formControlName]="formControl.name" name="formControl.name" />
+                </mat-form-field>
+                }
+            </ng-container>
+            <div>
+                <button mat-flat-button matStepperNext>Next<mat-icon>arrow_forward_ios</mat-icon></button>
+            </div>
+        </form>
+    </mat-step>
+    <mat-step [stepControl]="productsFormGroup">
+        <form [formGroup]="productsFormGroup">
+            <ng-template matStepLabel>Pick ingredients used for this recipe</ng-template>
+            <ng-container>
+                <mat-form-field>
+                    <mat-label>Pick ingredient</mat-label>
+                    <mat-chip-grid #productChipGrid aria-label="Ingredients selection">
+                        @for (product of selectedProducts(); track $index) {
+                        <mat-chip-row (removed)="removeProduct(product)">
+                            {{product.name}}
+                            <button matChipRemove
+                                [attr.aria-label]="'remove ' + product"><mat-icon>cancel</mat-icon></button>
+                        </mat-chip-row>
+                        }
+                    </mat-chip-grid>
+                    <input name="currentProduct" placeholder="Start typing..." #productInput
+                        [(ngModel)]="currentProduct" [matChipInputFor]="productChipGrid"
+                        [matAutocomplete]="productsAutocomplete" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                        (matChipInputTokenEnd)="addProduct($event)" type="text" matInput [formControlName]="'product'"
+                        [matAutocomplete]="productsAutocomplete" />
+                </mat-form-field>
+                <mat-autocomplete #productsAutocomplete="matAutocomplete" (optionSelected)="selectedProduct($event)">
+                    @for (product of filteredProducts(); track product) {
+                    <mat-option [value]="product">{{product.name}}</mat-option>
+                    }
+                </mat-autocomplete>
+            </ng-container>
+            <div>
+                <button mat-flat-button matStepperPrevious>Back<mat-icon>arrow_back_ios</mat-icon></button>
+                <button mat-flat-button matStepperNext>Next<mat-icon>arrow_forward_ios</mat-icon></button>
+            </div>
+        </form>
+    </mat-step>
+    <mat-step [stepControl]="toolsFormGroup">
+        <form [formGroup]="toolsFormGroup">
+            <ng-template matStepLabel>Pick tools needed for recipe execution</ng-template>
+            <ng-container>
+                <mat-form-field>
+                    <mat-label>Pick tool</mat-label>
+                    <mat-chip-grid #toolChipGrid aria-label="Tools selection">
+                        @for (tool of selectedTools(); track $index) {
+                        <mat-chip-row (removed)="removeTool(tool)">
+                            {{tool.toolName}}
+                            <button matChipRemove
+                                [attr.aria-label]="'remove ' + tool"><mat-icon>cancel</mat-icon></button>
+                        </mat-chip-row>
+                        }
+                    </mat-chip-grid>
+                    <input name="currentTool" placeholder="Start typing..." #toolInput [(ngModel)]="currentTool"
+                        [matChipInputFor]="toolChipGrid" [matAutocomplete]="toolsAutoComplete"
+                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="addTool($event)"
+                        type="text" matInput [formControlName]="'tool'" [matAutocomplete]="toolsAutoComplete" />
+                </mat-form-field>
+                <mat-autocomplete #toolsAutoComplete="matAutocomplete" (optionSelected)="selectedTool($event)">
+                    @for (tool of filteredTools(); track tool) {
+                    <mat-option [value]="tool">{{tool.toolName}}</mat-option>
+                    }
+                </mat-autocomplete>
+            </ng-container>
+            <div>
+                <button mat-flat-button matStepperPrevious>Back<mat-icon>arrow_back_ios</mat-icon></button>
+                <button mat-flat-button matStepperNext>Next<mat-icon>arrow_forward_ios</mat-icon></button>
+            </div>
+        </form>
+    </mat-step>
+    <mat-step [stepControl]="instructionsFormGroup">
+        <form [formGroup]="instructionsFormGroup">
+            <ng-template matStepLabel>Write instructions for the recipe</ng-template>
+            <button mat-flat-button class="add-button" (click)="addStep()"><mat-icon>add</mat-icon>Add next
+                step</button>
+            <mat-form-field>
+                <mat-label>Name</mat-label>
+                <textarea matInput placeholder="Next step" [formControlName]="'step'"
+                    name="formControl.name"></textarea>
+            </mat-form-field>
+            <ng-container>
+                <mat-list>
+                    @for (formControl of steps.controls; let i = $index; track formControl) {
+                    <mat-list-item>{{formControl.getRawValue()}}<mat-icon
+                            (click)="removeStep(i)">delete</mat-icon></mat-list-item>
+                    }
+                </mat-list>
+            </ng-container>
+            <div>
+                <button mat-flat-button matStepperPrevious>Back<mat-icon>arrow_back_ios</mat-icon></button>
+                <button mat-flat-button matStepperNext>Next<mat-icon>arrow_forward_ios</mat-icon></button>
+            </div>
+        </form>
+    </mat-step>
+    <mat-step>
+        <ng-template matStepLabel>Done</ng-template>
+        <p>You are now done.</p>
+        <div>
+            <button mat-flat-button matStepperPrevious>Back<mat-icon>arrow_back_ios</mat-icon></button>
+            <button mat-flat-button (click)="stepper.reset()">Reset<mat-icon>replay</mat-icon></button>
+        </div>
+    </mat-step>
+</mat-stepper>

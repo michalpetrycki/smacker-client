@@ -1,0 +1,9 @@
+<h2 mat-dialog-title>{{data.component.dialogTitle}}</h2>
+<mat-dialog-content>
+    <ng-template #dcontent></ng-template>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-button mat-dialog-close>Cancel</button>
+    <!-- <button mat-button [mat-dialog-close]="this.data.component.fields">Add</button> -->
+    <button mat-button (click)="onNoClick()">Add</button>
+</mat-dialog-actions>

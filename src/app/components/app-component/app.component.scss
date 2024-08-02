@@ -1,0 +1,23 @@
+.header {
+    width: 100%;
+    background-color: green;
+    height: 6vh;
+    margin: 0;
+}
+
+.content {
+    display: flex;
+    justify-content: space-between;
+}
+
+app-left-sidebar,
+app-right-sidebar {
+    max-width: calc(33% / 2);
+    background-color: blue;
+}
+
+.router-outlet {
+    width: 66%;
+    flex-grow: 1;
+    background-color: red;
+}

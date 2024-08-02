@@ -1,0 +1,17 @@
+<button mat-flat-button color="primary" (click)="addNewRecipe()"><mat-icon>add</mat-icon>Add recipe</button>
+
+<ng-container *ngIf="recipes$ | async as recipes; else loading;">
+    <ng-container *ngIf="recipes.length > 0; else nodata">
+        <div class="recipes-list">
+            @for (rec of recipes; track rec) {
+            <p>Recipe here {{ rec.name}}</p>
+            }
+        </div>
+    </ng-container>
+    <ng-template #nodata>
+        <h2>No recipes for this category</h2>
+    </ng-template>
+</ng-container>
+<ng-template #loading>
+    <h2>Loading...</h2>
+</ng-template>
