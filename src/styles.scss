@@ -7,3 +7,25 @@ body {
     margin: 0;
     font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+.mat-mdc-dialog-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 80vh !important;
+    max-width: 80vw !important;
+
+    .mat-stepper-horizontal,
+    .mat-horizontal-stepper-wrapper,
+    .mat-horizontal-content-container,
+    .mat-horizontal-stepper-content {
+        height: 100%;
+
+        .mat-horizontal-stepper-content {
+            display: grid;
+            place-content: center;
+        }
+    }
+
+}

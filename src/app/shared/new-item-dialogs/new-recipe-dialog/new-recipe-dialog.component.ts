@@ -13,6 +13,7 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { ToolAPI, ToolService } from 'src/app/services/tool/tool.service';
 import { ProductAPI, ProductService } from 'src/app/services/product/product.service';
 import { MatButtonModule } from '@angular/material/button';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 
 
 @Component({
@@ -21,12 +22,13 @@ import { MatButtonModule } from '@angular/material/button';
 	imports: [MatStepperModule, MatFormField, FormsModule, MatLabel, ReactiveFormsModule, MatInputModule, MatListModule, MatButtonModule,
 		MatIconModule, MatAutocompleteModule, CommonModule, MatChipsModule],
 	templateUrl: './new-recipe-dialog.component.html',
-	styleUrl: './new-recipe-dialog.component.scss'
+	styleUrl: './new-recipe-dialog.component.scss',
+	providers: [{
+		provide: STEPPER_GLOBAL_OPTIONS,
+		useValue: { showError: true, displayDefaultIndicatorType: false }
+	}]
 })
 export class NewRecipeDialogComponent {
-
-
-
 
 	readonly productService = inject(ProductService);
 	readonly toolService = inject(ToolService);
@@ -174,9 +176,21 @@ export class NewRecipeDialogComponent {
 		this.steps.controls.splice(index, 1);
 	}
 
+	addRecipe(abcd: any): void {
+		debugger;
+	}
+
+	stepIsInvalid(formGroup: FormGroup): boolean {
+		return formGroup.invalid;
+	}
+
+	addIngredient(): void {
+		alert('ok');
+	}
+
 }
 
-interface InputControl {
+export interface InputControl {
 	name: string;
 	required?: boolean;
 }

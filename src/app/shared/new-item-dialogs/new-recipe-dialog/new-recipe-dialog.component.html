@@ -1,5 +1,5 @@
 <mat-stepper orientation="horizontal" linear="false" #stepper>
-    <mat-step [stepControl]="detailsFormGroup">
+    <mat-step [stepControl]="detailsFormGroup" completed="stepIsInvalid(detailsFormGroup)">
         <form [formGroup]="detailsFormGroup">
             <ng-template matStepLabel>Fill out name and description</ng-template>
             <ng-container>
@@ -8,9 +8,10 @@
                     <mat-label>{{formControl.name}}</mat-label>
                     <input matInput placeholder="abcd" [formControlName]="formControl.name" name="formControl.name" />
                 </mat-form-field>
+                <br />
                 }
             </ng-container>
-            <div>
+            <div class="buttons">
                 <button mat-flat-button matStepperNext>Next<mat-icon>arrow_forward_ios</mat-icon></button>
             </div>
         </form>
@@ -42,8 +43,9 @@
                     }
                 </mat-autocomplete>
             </ng-container>
-            <div>
+            <div class="buttons">
                 <button mat-flat-button matStepperPrevious>Back<mat-icon>arrow_back_ios</mat-icon></button>
+                <button mat-flat-button (click)="addIngredient()">New</button>
                 <button mat-flat-button matStepperNext>Next<mat-icon>arrow_forward_ios</mat-icon></button>
             </div>
         </form>
@@ -74,7 +76,7 @@
                     }
                 </mat-autocomplete>
             </ng-container>
-            <div>
+            <div class="buttons">
                 <button mat-flat-button matStepperPrevious>Back<mat-icon>arrow_back_ios</mat-icon></button>
                 <button mat-flat-button matStepperNext>Next<mat-icon>arrow_forward_ios</mat-icon></button>
             </div>
@@ -98,7 +100,7 @@
                     }
                 </mat-list>
             </ng-container>
-            <div>
+            <div class="buttons">
                 <button mat-flat-button matStepperPrevious>Back<mat-icon>arrow_back_ios</mat-icon></button>
                 <button mat-flat-button matStepperNext>Next<mat-icon>arrow_forward_ios</mat-icon></button>
             </div>
@@ -106,10 +108,10 @@
     </mat-step>
     <mat-step>
         <ng-template matStepLabel>Done</ng-template>
-        <p>You are now done.</p>
-        <div>
+        <p>Add recipe</p>
+        <div class="buttons">
             <button mat-flat-button matStepperPrevious>Back<mat-icon>arrow_back_ios</mat-icon></button>
-            <button mat-flat-button (click)="stepper.reset()">Reset<mat-icon>replay</mat-icon></button>
+            <button mat-flat-button (click)="addRecipe($event)">Create<mat-icon>book</mat-icon></button>
         </div>
     </mat-step>
 </mat-stepper>

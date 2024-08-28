@@ -8,12 +8,12 @@ export class SnackbarService {
 
 	snackBar = inject(MatSnackBar);
 
-	dispalySuccessMessage(message: string): void {
+	displayMessage(message: string): void {
 		this.snackBar.open(message);
 	}
 
 	displayErrorMessage(error: string): void {
-		this.snackBar.open('Something went wrong ;( ' + error);
+		this.displayMessage('Something went wrong ;( ' + error);
 	}
 
 }

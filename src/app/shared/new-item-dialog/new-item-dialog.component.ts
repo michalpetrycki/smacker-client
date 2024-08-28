@@ -1,4 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { Component, ComponentRef, ViewChild, ViewContainerRef, inject } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import {
 	MAT_DIALOG_DATA,
 	MatDialogActions,
@@ -7,11 +9,12 @@ import {
 	MatDialogRef,
 	MatDialogTitle,
 } from '@angular/material/dialog';
+import { Observable, of } from 'rxjs';
 
 @Component({
 	selector: 'app-new-item-dialog',
 	standalone: true,
-	imports: [MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle],
+	imports: [MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle, MatButtonModule, CommonModule],
 	templateUrl: './new-item-dialog.component.html',
 	styleUrl: './new-item-dialog.component.scss'
 })
@@ -21,13 +24,13 @@ export class NewItemDialogComponent {
 	componentRef: ComponentRef<any> | undefined;
 	dialogRef = inject(MatDialogRef<NewItemDialogComponent>);
 	data = inject<any>(MAT_DIALOG_DATA);
+	itemType?: string;
+	item$?: Observable<any>;
 
 	ngOnInit() {
 		this.componentRef = this.vcRef?.createComponent(this.data.component);
-	}
-
-	onNoClick(): void {
-		this.dialogRef.close(this.componentRef?.instance.fields);
+		this.itemType = this.data.itemType ?? '';
+		this.item$ = this.data.item ?? of(null);
 	}
 
 	ngOnDestroy() {

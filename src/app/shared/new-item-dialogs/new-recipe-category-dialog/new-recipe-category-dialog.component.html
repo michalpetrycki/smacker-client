@@ -1,6 +1,19 @@
-<div class="input-container">
-    <mat-form-field class="form-field">
-        <mat-label>Category name</mat-label>
-        <input matInput [(ngModel)]="fields['newCategoryName']" />
-    </mat-form-field>
-</div>
+<mat-stepper orientation="horizontal" linear="false" #stepper>
+    <mat-step [stepControl]="categoryFormGroup" completed="stepIsInvalid(formGroup)">
+        <form [formGroup]="categoryFormGroup">
+            <ng-template matStepLabel>Enter name for new category</ng-template>
+            <ng-container>
+                @for (formControl of controls; track formControl) {
+                <mat-form-field>
+                    <mat-label>{{formControl.name}}</mat-label>
+                    <input matInput placeholder="abcd" [formControlName]="formControl.name" name="formControl.name" />
+                </mat-form-field>
+                <br />
+                }
+            </ng-container>
+            <div class="buttons">
+                <button mat-flat-button (click)="addItem()">Add category<mat-icon>add</mat-icon></button>
+            </div>
+        </form>
+    </mat-step>
+</mat-stepper>

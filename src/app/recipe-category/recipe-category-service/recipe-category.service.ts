@@ -11,24 +11,28 @@ export class RecipesCategoryService {
 	http = inject(HttpClient);
 	apiBase = environment.baseUrl;
 	recipeCategoriesUrl = `${this.apiBase}/recipe-categories`;
-
-	createRecipeCategory(createAPI: CreateRecipeCategoryAPI): Observable<RecipeCategoryAPI> {
+	
+	createCategory(createAPI: CreateRecipeCategoryAPI): Observable<RecipeCategoryAPI> {
 		return this.http.post<RecipeCategoryAPI>(this.recipeCategoriesUrl, createAPI);
+	}
+
+	getCategory(categoryId: string): Observable<RecipeCategoryAPI> {
+		return this.http.get<RecipeCategoryAPI>(`${this.recipeCategoriesUrl}/${categoryId}`);
 	}
 
 	getCategories(): Observable<RecipeCategoryAPI[]> {
 		return this.http.get<RecipeCategoryAPI[]>(this.recipeCategoriesUrl);
 	}
 
-	deleteCategory(categoryId: number): Observable<boolean> {
-		return this.http.delete<boolean>(`${this.recipeCategoriesUrl}/${categoryId}`);
+	deleteCategory(categoryPid: string): Observable<number> {
+		return this.http.delete<number>(`${this.recipeCategoriesUrl}/${categoryPid}`);
 	}
 
 }
 
 export interface RecipeCategoryAPI {
-	id: number;
 	name: string;
+	publicId: string;
 }
 
 export interface CreateRecipeCategoryAPI {

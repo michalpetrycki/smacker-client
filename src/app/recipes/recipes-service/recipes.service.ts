@@ -15,20 +15,20 @@ export class RecipesService {
 	// 	return this._recipes.find(recipe => recipe.id === recipeId);
 	// }
 
-	// getRecipesByCategoryId(categoryId: number): Recipe[] {
-	// 	return this._recipes.filter(recipe => recipe.categoryId === categoryId);
+	getRecipesByCategoryPublicId(categoryPid: string): Observable<RecipeAPI[]> {
+		return this.http.get<RecipeAPI[]>(`${environment.baseUrl}/recipe-categories/${categoryPid}/recipes`);
+	}
+
+
+
+
+	// getRecipes(): Observable<Recipe[]> {
+	// 	return this.http.get<Recipe[]>(`${this.apiBase}/recipes`);
 	// }
 
-
-
-
-	getRecipes(): Observable<Recipe[]> {
-		return this.http.get<Recipe[]>(`${this.apiBase}/recipes`);
-	}
-
-	getRecipe(recipeId: number): Observable<Recipe> {
-		return this.http.get<Recipe>(`${this.apiBase}/recipes/${recipeId}`);
-	}
+	// getRecipe(recipeId: number): Observable<Recipe> {
+	// 	return this.http.get<Recipe>(`${this.apiBase}/recipes/${recipeId}`);
+	// }
 
 	// createRecipe(recipeAPI: RecipeAPI): Observable<Recipe> {
 	// 	return this.http.post<Recipe>(`${this.apiBase}/recipes`, recipeAPI);
@@ -44,7 +44,7 @@ export class RecipesService {
 
 }
 
-export interface Recipe {
+export interface RecipeAPI {
 	id: number;
 	name: string;
 	description: string;
