@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NewItemDialogComponent } from './new-item-dialog.component';
+import { SimpleTableComponent } from './simple-table.component';
 
-describe('NewItemDialogComponent', () => {
-    let component: NewItemDialogComponent<any>;
-    let fixture: ComponentFixture<NewItemDialogComponent<any>>;
+describe('SimpleTableComponent', () => {
+    let component: SimpleTableComponent<any>;
+    let fixture: ComponentFixture<SimpleTableComponent<any>>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [NewItemDialogComponent],
+            imports: [SimpleTableComponent],
         }).compileComponents();
 
-        fixture = TestBed.createComponent(NewItemDialogComponent);
+        fixture = TestBed.createComponent(SimpleTableComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

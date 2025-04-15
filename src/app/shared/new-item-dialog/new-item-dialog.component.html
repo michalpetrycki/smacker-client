@@ -1,4 +1,6 @@
-<h2 mat-dialog-title>New {{itemType}} <span *ngIf="item$ | async as item">for {{item.name}}</span></h2>
+<h2 mat-dialog-title>
+    New {{ itemType }} <span *ngIf="item$ | async as item">for {{ item }}</span>
+</h2>
 <mat-dialog-content>
     <ng-template #dcontent></ng-template>
 </mat-dialog-content>

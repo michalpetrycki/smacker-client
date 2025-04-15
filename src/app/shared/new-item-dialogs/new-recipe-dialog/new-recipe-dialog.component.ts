@@ -1,7 +1,26 @@
 import { CommonModule } from '@angular/common';
-import { Component, Signal, WritableSignal, computed, inject, model, signal } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import {
+    Component,
+    Signal,
+    WritableSignal,
+    computed,
+    inject,
+    model,
+    signal,
+} from '@angular/core';
+import {
+    FormArray,
+    FormBuilder,
+    FormControl,
+    FormGroup,
+    FormsModule,
+    ReactiveFormsModule,
+    Validators,
+} from '@angular/forms';
+import {
+    MatAutocompleteModule,
+    MatAutocompleteSelectedEvent,
+} from '@angular/material/autocomplete';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -10,187 +29,210 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { ToolAPI, ToolService } from 'src/app/services/tool/tool.service';
-import { ProductAPI, ProductService } from 'src/app/services/product/product.service';
+import {
+    ProductAPI,
+    ProductService,
+} from 'src/app/services/product/product.service';
 import { MatButtonModule } from '@angular/material/button';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-
+import { ToolAPI } from 'src/app/shared/models/ToolAPI';
+import { ToolService } from 'src/app/tool/tool-service/tool.service';
 
 @Component({
-	selector: 'app-new-recipe-dialog',
-	standalone: true,
-	imports: [MatStepperModule, MatFormField, FormsModule, MatLabel, ReactiveFormsModule, MatInputModule, MatListModule, MatButtonModule,
-		MatIconModule, MatAutocompleteModule, CommonModule, MatChipsModule],
-	templateUrl: './new-recipe-dialog.component.html',
-	styleUrl: './new-recipe-dialog.component.scss',
-	providers: [{
-		provide: STEPPER_GLOBAL_OPTIONS,
-		useValue: { showError: true, displayDefaultIndicatorType: false }
-	}]
+    selector: 'app-new-recipe-dialog',
+    standalone: true,
+    imports: [
+        MatStepperModule,
+        MatFormField,
+        FormsModule,
+        MatLabel,
+        ReactiveFormsModule,
+        MatInputModule,
+        MatListModule,
+        MatButtonModule,
+        MatIconModule,
+        MatAutocompleteModule,
+        CommonModule,
+        MatChipsModule,
+    ],
+    templateUrl: './new-recipe-dialog.component.html',
+    styleUrl: './new-recipe-dialog.component.scss',
+    providers: [
+        {
+            provide: STEPPER_GLOBAL_OPTIONS,
+            useValue: { showError: true, displayDefaultIndicatorType: false },
+        },
+    ],
 })
 export class NewRecipeDialogComponent {
+    readonly productService = inject(ProductService);
+    readonly toolService = inject(ToolService);
+    readonly separatorKeysCodes: number[] = [ENTER, COMMA];
 
-	readonly productService = inject(ProductService);
-	readonly toolService = inject(ToolService);
-	readonly separatorKeysCodes: number[] = [ENTER, COMMA];
+    /** Ingredients autocomplete */
+    productsFormGroup: FormGroup;
+    readonly currentProduct = model('');
+    readonly selectedProducts: WritableSignal<ProductAPI[]> = signal([]);
+    readonly productsOptions = toSignal(this.productService.getProducts());
+    readonly filteredProducts = computed(() => {
+        const currentProduct = this.currentProduct()?.toLowerCase();
+        return currentProduct
+            ? this.productsOptions()?.filter((product) =>
+                  product.name.toLowerCase().includes(currentProduct)
+              )
+            : this.productsOptions()?.slice();
+    });
 
-	/** Ingredients autocomplete */
-	productsFormGroup: FormGroup;
-	readonly currentProduct = model('');
-	readonly selectedProducts: WritableSignal<ProductAPI[]> = signal([]);
-	readonly productsOptions = toSignal(this.productService.getProducts());
-	readonly filteredProducts = computed(() => {
-		const currentProduct = this.currentProduct()?.toLowerCase();
-		return currentProduct ? this.productsOptions()?.filter(product => product.name.toLowerCase().includes(currentProduct))
-			: this.productsOptions()?.slice();
-	});
+    selectedProduct(event: MatAutocompleteSelectedEvent): void {
+        const selectedProduct: ProductAPI = event.option.value as ProductAPI;
+        this.selectedProducts.update((products) => [
+            ...products,
+            selectedProduct,
+        ]);
+        this.currentProduct.set('');
+        event.option.deselect();
+    }
 
-	selectedProduct(event: MatAutocompleteSelectedEvent): void {
-		const selectedProduct: ProductAPI = event.option.value as ProductAPI;
-		this.selectedProducts.update(products => [...products, selectedProduct]);
-		this.currentProduct.set('');
-		event.option.deselect();
-	}
+    addProduct(ing: any): void {
+        // this.products.push(ing);
+        // this.productsFormGroup.get('product')?.setValue('');
+    }
 
-	addProduct(ing: any): void {
-		// this.products.push(ing);
-		// this.productsFormGroup.get('product')?.setValue('');
-	}
+    removeProduct(ing: any): void {
+        this.products.controls.splice(0, 1);
+    }
 
-	removeProduct(ing: any): void {
-		this.products.controls.splice(0, 1);
-	}
+    /** End of ingredients autocomplete */
 
-	/** End of ingredients autocomplete */
+    /** Tools autocomplete */
+    toolsFormGroup: FormGroup;
+    readonly currentTool = model('');
+    readonly selectedTools: WritableSignal<ToolAPI[]> = signal([]);
+    readonly toolsOptions = toSignal(this.toolService.getTools());
+    readonly filteredTools = computed(() => {
+        const currentTool = this.currentTool()?.toLowerCase();
+        return currentTool
+            ? this.toolsOptions()?.filter((tool) =>
+                  tool.name.toLowerCase().includes(currentTool)
+              )
+            : this.toolsOptions()?.slice();
+    });
 
-	/** Tools autocomplete */
-	toolsFormGroup: FormGroup;
-	readonly currentTool = model('');
-	readonly selectedTools: WritableSignal<ToolAPI[]> = signal([]);
-	readonly toolsOptions = toSignal(this.toolService.getTools());
-	readonly filteredTools = computed(() => {
-		const currentTool = this.currentTool()?.toLowerCase();
-		return currentTool ? this.toolsOptions()?.filter(tool => tool.toolName.toLowerCase().includes(currentTool))
-			: this.toolsOptions()?.slice();
-	});
+    selectedTool(event: MatAutocompleteSelectedEvent): void {
+        const selectedTool: ToolAPI = event.option.value as ToolAPI;
+        this.selectedTools.update((tools) => [...tools, selectedTool]);
+        this.currentTool.set('');
+        event.option.deselect();
+    }
 
-	selectedTool(event: MatAutocompleteSelectedEvent): void {
-		const selectedTool: ToolAPI = event.option.value as ToolAPI;
-		this.selectedTools.update(tools => [...tools, selectedTool]);
-		this.currentTool.set('');
-		event.option.deselect();
-	}
+    addTool(event: MatChipInputEvent): void {
+        const value = (event.value || '').trim();
 
+        debugger;
 
-	addTool(event: MatChipInputEvent): void {
-		const value = (event.value || '').trim();
+        if (value) {
+            // this.selectedTools.update(tools => [...tools, value]);
+        }
 
-		debugger;
+        this.currentTool.set('');
+    }
 
-		if (value) {
-			// this.selectedTools.update(tools => [...tools, value]);
-		}
+    removeTool(tool: any): void {
+        this.tools.controls.splice(0, 1);
+    }
 
-		this.currentTool.set('');
-	}
+    /** End of tools autocomplete */
 
-	removeTool(tool: any): void {
-		this.tools.controls.splice(0, 1);
-	}
+    // stateGroupOptions: Observable<any> = of([
+    // 	{ letter: 'A', names: ['Agata', 'Ada', 'Ala'] },
+    // 	{ letter: 'B', names: ['Basia', 'Bibi', 'Bubu'] },
+    // 	{ letter: 'C', names: ['Chania', 'Cysia', 'Cola'] }
+    // ]);
 
-	/** End of tools autocomplete */
+    detailsFormGroup: FormGroup;
+    instructionsFormGroup: FormGroup;
 
-	// stateGroupOptions: Observable<any> = of([
-	// 	{ letter: 'A', names: ['Agata', 'Ada', 'Ala'] },
-	// 	{ letter: 'B', names: ['Basia', 'Bibi', 'Bubu'] },
-	// 	{ letter: 'C', names: ['Chania', 'Cysia', 'Cola'] }
-	// ]);
+    detailsGroupControls: InputControl[] = [
+        { name: 'name', required: true },
+        { name: 'description' },
+    ];
 
-	detailsFormGroup: FormGroup;
-	instructionsFormGroup: FormGroup;
+    // ingredientsGroupControls: InputControl[] = [
+    // 	{ name: 'ingredients' },
+    // ];
 
-	detailsGroupControls: InputControl[] = [
-		{ name: 'name', required: true },
-		{ name: 'description' }
-	];
+    // toolsGroupControls: InputControl[] = [
+    // 	{ name: 'tools' },
+    // ];
 
-	// ingredientsGroupControls: InputControl[] = [
-	// 	{ name: 'ingredients' },
-	// ];
+    instructionsGroupControls: InputControl[] = [{ name: 'steps' }];
 
-	// toolsGroupControls: InputControl[] = [
-	// 	{ name: 'tools' },
-	// ];
+    get products(): FormArray {
+        return this.productsFormGroup.get('products') as FormArray;
+    }
 
-	instructionsGroupControls: InputControl[] = [
-		{ name: 'steps' }
-	];
+    get tools(): FormArray {
+        return this.toolsFormGroup.get('tools') as FormArray;
+    }
 
-	get products(): FormArray {
-		return this.productsFormGroup.get('products') as FormArray;
-	}
+    get steps(): FormArray {
+        return this.instructionsFormGroup.get('steps') as FormArray;
+    }
 
-	get tools(): FormArray {
-		return this.toolsFormGroup.get('tools') as FormArray;
-	}
+    // chosenTools: any[] = [];
+    // chosenIngredients: any[] = [];
 
-	get steps(): FormArray {
-		return this.instructionsFormGroup.get('steps') as FormArray;
-	}
+    constructor(private fb: FormBuilder) {
+        this.detailsFormGroup = new FormGroup({});
+        this.productsFormGroup = new FormGroup({
+            product: new FormControl(null),
+            products: this.fb.array([]),
+        });
+        this.toolsFormGroup = new FormGroup({
+            tool: new FormControl(null),
+            tools: this.fb.array([]),
+        });
+        this.instructionsFormGroup = new FormGroup({
+            step: new FormControl(null),
+            steps: this.fb.array([]),
+        });
 
-	// chosenTools: any[] = [];
-	// chosenIngredients: any[] = [];
+        for (let control of this.detailsGroupControls) {
+            const validators = control.required ? Validators.required : null;
+            const formControl = new FormControl<string | null>('', validators);
+            this.detailsFormGroup.addControl(control.name, formControl);
+        }
 
-	constructor(private fb: FormBuilder) {
+        // this.filteredToolsOptions = this.toolsFormGroup.get('tool')?.valueChanges.pipe(startWith(''), map(value => this._filterTools(value || '')));
+    }
 
-		this.detailsFormGroup = new FormGroup({});
-		this.productsFormGroup = new FormGroup({
-			product: new FormControl(null),
-			products: this.fb.array([])
-		});
-		this.toolsFormGroup = new FormGroup({
-			tool: new FormControl(null),
-			tools: this.fb.array([])
-		});
-		this.instructionsFormGroup = new FormGroup({
-			step: new FormControl(null),
-			steps: this.fb.array([])
-		});
+    addStep(): void {
+        this.steps.push(
+            new FormControl<string | null>(
+                this.instructionsFormGroup.get('step')?.getRawValue()
+            )
+        );
+        this.instructionsFormGroup.get('step')?.setValue(null);
+    }
 
-		for (let control of this.detailsGroupControls) {
-			const validators = control.required ? Validators.required : null;
-			const formControl = new FormControl<string | null>('', validators);
-			this.detailsFormGroup.addControl(control.name, formControl);
-		}
+    removeStep(index: number): void {
+        this.steps.controls.splice(index, 1);
+    }
 
-		// this.filteredToolsOptions = this.toolsFormGroup.get('tool')?.valueChanges.pipe(startWith(''), map(value => this._filterTools(value || '')));
+    addRecipe(abcd: any): void {
+        debugger;
+    }
 
-	}
+    stepIsInvalid(formGroup: FormGroup): boolean {
+        return formGroup.invalid;
+    }
 
-	addStep(): void {
-		this.steps.push(new FormControl<string | null>(this.instructionsFormGroup.get('step')?.getRawValue()));
-		this.instructionsFormGroup.get('step')?.setValue(null);
-	}
-
-	removeStep(index: number): void {
-		this.steps.controls.splice(index, 1);
-	}
-
-	addRecipe(abcd: any): void {
-		debugger;
-	}
-
-	stepIsInvalid(formGroup: FormGroup): boolean {
-		return formGroup.invalid;
-	}
-
-	addIngredient(): void {
-		alert('ok');
-	}
-
+    addIngredient(): void {
+        alert('ok');
+    }
 }
 
 export interface InputControl {
-	name: string;
-	required?: boolean;
+    name: string;
+    required?: boolean;
 }

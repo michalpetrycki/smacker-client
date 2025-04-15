@@ -1,3 +1,16 @@
 <div class="header">
-    <p>Smacker</p>
+    <img class="logo" src="assets/images/logo.png" [height]="80" [width]="80" />
+
+    <div class="navigation-buttons">
+        @for (route of routes; track $index) {
+        <a
+            class="navigation-button"
+            matTooltip="{{ route.name }}"
+            [routerLink]="'/' + route.path"
+        >
+            <ng-icon name="{{ route.icon }}"></ng-icon>
+        </a>
+
+        }
+    </div>
 </div>

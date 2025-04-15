@@ -1,11 +1,16 @@
 <div class="left-sidebar">
     <mat-nav-list *ngIf="navItems$ | async as navItems">
         @for (link of navItems; track link) {
-        <a [routerLink]="'/category/' + link.route + '/recipes'" routerLinkActive #rla="routerLinkActive"
-            [activated]="rla.isActive" mat-list-item>
+        <a
+            [routerLink]="'/category/' + link.route + '/recipes'"
+            routerLinkActive
+            #rla="routerLinkActive"
+            [activated]="rla.isActive"
+            mat-list-item
+        >
             {{ link.displayName }}
         </a>
-        <p (click)="removeCategory(link.route)" style="color: green;">delete</p>
+        <p (click)="removeCategory(link.route)" style="color: green">delete</p>
         }
     </mat-nav-list>
 </div>

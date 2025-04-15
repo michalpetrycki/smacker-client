@@ -1,0 +1,18 @@
+<ng-container *ngIf="tools$ | async as tools; else loading">
+    <ng-container *ngIf="tools.length > 0; else nodata">
+        <app-simple-table
+            [dataSource]="tools"
+            [displayNameProperty]="'name'"
+            [itemType]="'tool'"
+            (newItemRequest)="addTool($event)"
+            (updateItemRequest)="updateTool($event)"
+            (deleteItemRequest)="deleteTool($event)"
+        ></app-simple-table>
+    </ng-container>
+    <ng-template #nodata>
+        <h2>No tools found.</h2>
+    </ng-template>
+</ng-container>
+<ng-template #loading>
+    <h2>Loading...</h2>
+</ng-template>

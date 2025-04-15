@@ -1,3 +1,15 @@
+$button-height: 4em;
+$button-margin: 0.5em;
+$header-height: calc($button-height + $button-margin * 2);
+
+.header {
+    height: $header-height;
+}
+
+.content {
+    height: calc(100% - $header-height);
+}
+
 html,
 body {
     height: 100%;
@@ -27,5 +39,10 @@ body {
             place-content: center;
         }
     }
+}
 
+.mat-drawer-inner-container {
+    display: flex !important;
+    align-items: center;
+    justify-content: center !important;
 }
