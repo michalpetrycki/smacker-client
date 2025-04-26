@@ -1,0 +1,31 @@
+.mat-drawer-over {
+    width: 20%;
+    .drawer-form {
+        text-align: center;
+
+        .drawer-buttons {
+            display: flex;
+            gap: 2.5em;
+        }
+    }
+}
+
+.mat-drawer-content {
+    display: flex !important;
+    margin-top: 4em;
+}
+
+.drawer-content-div:first-of-type {
+    margin-left: auto;
+    margin-right: auto;
+    align-content: center;
+}
+
+.drawer-content-div:last-of-type {
+    margin: 0 auto;
+    width: 60%;
+
+    table {
+        width: 100%;
+    }
+}

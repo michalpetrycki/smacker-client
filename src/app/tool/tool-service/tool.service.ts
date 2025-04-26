@@ -2,7 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CreateToolAPI } from 'src/app/shared/models/CreateToolAPI';
+import { PaginatedResponse } from 'src/app/shared/models/PaginatedResponse';
 import { ToolAPI } from 'src/app/shared/models/ToolAPI';
+import { Pagination } from 'src/app/shared/simple-table/simple-table.component';
 import { environment } from 'src/environments/environment.development';
 
 @Injectable({
@@ -17,8 +19,12 @@ export class ToolService {
         return this.http.post<ToolAPI>(this.toolsUrl, createToolAPI);
     }
 
-    getTools(): Observable<ToolAPI[]> {
-        return this.http.get<ToolAPI[]>(this.toolsUrl);
+    getTools(pagination: Pagination): Observable<PaginatedResponse<ToolAPI>> {
+        let paginationString = `${this.toolsUrl}?pageNo=${pagination.pageNo}&pageSize=${pagination.pageSize}&sortBy=${pagination.sortBy}&sortDirection=${pagination.sortDirection}`;
+        if (pagination.filter) {
+            paginationString += `&filter=${pagination.filter}`;
+        }
+        return this.http.get<PaginatedResponse<ToolAPI>>(paginationString);
     }
 
     updateTool(toolAPI: ToolAPI): Observable<ToolAPI> {

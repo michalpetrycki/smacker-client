@@ -28,7 +28,7 @@ export class HeaderComponent {
     routes: RouteWithIcon[] = [
         { name: 'New Recipe', path: '/recipe', icon: 'hugeAddSquare' },
         { name: 'Recipes', path: '/recipes', icon: 'hugeNote03' },
-        { name: 'Categories', path: '/categories', icon: 'hugeSpatula' },
+        { name: 'Categories', path: '/recipe-categories', icon: 'hugeSpatula' },
         { name: 'Products', path: '/products', icon: 'hugeVegetarianFood' },
         { name: 'Tools', path: '/tools', icon: 'hugeSpatula' },
     ];

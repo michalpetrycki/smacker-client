@@ -1,0 +1,44 @@
+<mat-drawer-container class="drawer-simple-table">
+    <mat-drawer
+        #drawer
+        mode="over"
+        position="start"
+        (closed)="onDrawerClosed()"
+    >
+        <div class="drawer-form">
+            <h2>{{ isEditing ? "Edit tool" : "Add tool" }}</h2>
+            <div class="drawer-buttons">
+                <button
+                    mat-flat-button
+                    [disabled]="!changesDetected"
+                    (click)="saveRow()"
+                >
+                    Save
+                </button>
+                <button mat-flat-button color="warn" (click)="cancelEdit()">
+                    Cancel
+                </button>
+            </div>
+            <br />
+            <mat-form-field appearance="outline">
+                <mat-label>Tool name</mat-label>
+                <input matInput [(ngModel)]="formData['name']" />
+            </mat-form-field>
+        </div>
+    </mat-drawer>
+    <mat-drawer-content
+        ><div class="drawer-content-div">
+            <button mat-flat-button (click)="addNew()">Add new</button>
+        </div>
+        <div class="drawer-content-div">
+            <app-simple-table
+                [paginatedResponse]="paginatedResponse()"
+                [displayNameProperty]="displayNameProperty()"
+                [editingRowId]="editingRowId()"
+                (deleteItemRequest)="deleteItem($event)"
+                (updateItemRequest)="updateItem($event)"
+                (pageRequest)="requestNextPage($event)"
+            ></app-simple-table>
+        </div>
+    </mat-drawer-content>
+</mat-drawer-container>

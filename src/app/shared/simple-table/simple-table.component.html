@@ -1,77 +1,72 @@
-<mat-drawer-container class="drawer-simple-table">
-    <mat-drawer
-        #drawer
-        mode="over"
-        position="start"
-        (closed)="onDrawerClosed()"
+<ng-container
+    *ngIf="
+        paginatedResponse() &&
+            paginatedResponse()?.results &&
+            (paginatedResponse()?.results)!.length > 0;
+        else noData
+    "
+>
+    <div class="filter">
+        <app-table-filter
+            (filterRequest)="onFilterChange($event)"
+        ></app-table-filter>
+    </div>
+    <table
+        mat-table
+        [dataSource]="paginatedResponse()!.results"
+        matSort
+        (matSortChange)="onSortChange($event)"
     >
-        <div class="drawer-form">
-            <h2>{{ isEditing ? "Edit tool" : "Add tool" }}</h2>
-            <div class="drawer-buttons">
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="toolName">
+                Name
+            </th>
+            <td mat-cell *matCellDef="let row">
+                {{ row.name }}
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="update">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let row">
                 <button
                     mat-flat-button
-                    [disabled]="!changesDetected"
-                    (click)="saveRow()"
+                    (click)="editRow(row)"
+                    #updateButton
+                    [attr.data-public-id]="row.publicId"
                 >
-                    Save
+                    Update
                 </button>
-                <button mat-flat-button color="warn" (click)="cancelEdit()">
-                    Cancel
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="delete">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let row">
+                <button mat-flat-button (click)="deleteItem(row.publicId)">
+                    Delete
                 </button>
-            </div>
-            <br />
-            <mat-form-field appearance="outline">
-                <mat-label>Tool name</mat-label>
-                <input matInput [(ngModel)]="formData['name']" />
-            </mat-form-field>
-        </div>
-    </mat-drawer>
-    <mat-drawer-content
-        ><div class="drawer-content-div">
-            <button mat-flat-button (click)="addNew()">Add new</button>
-        </div>
-        <div class="drawer-content-div">
-            <table mat-table [dataSource]="dataSource">
-                <ng-container matColumnDef="name">
-                    <th mat-header-cell *matHeaderCellDef>Name</th>
-                    <td mat-cell *matCellDef="let row">
-                        {{ row.name }}
-                    </td>
-                </ng-container>
+            </td>
+        </ng-container>
 
-                <ng-container matColumnDef="update">
-                    <th mat-header-cell *matHeaderCellDef></th>
-                    <td mat-cell *matCellDef="let row">
-                        <button
-                            mat-flat-button
-                            (click)="editRow(row)"
-                            #updateButton
-                            [attr.data-public-id]="row.publicId"
-                        >
-                            Update
-                        </button>
-                    </td>
-                </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr
+            mat-row
+            *matRowDef="let row; columns: displayedColumns"
+            [ngClass]="{ 'edited-row': editingRowId() === row.publicId }"
+        ></tr>
+    </table>
 
-                <ng-container matColumnDef="delete">
-                    <th mat-header-cell *matHeaderCellDef></th>
-                    <td mat-cell *matCellDef="let row">
-                        <button
-                            mat-flat-button
-                            (click)="deleteItem(row.publicId)"
-                        >
-                            Delete
-                        </button>
-                    </td>
-                </ng-container>
-
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr
-                    mat-row
-                    *matRowDef="let row; columns: displayedColumns"
-                    [ngClass]="{ 'edited-row': editingRowId === row.publicId }"
-                ></tr>
-            </table>
-        </div>
-    </mat-drawer-content>
-</mat-drawer-container>
+    <mat-paginator
+        [length]="paginatedResponse()?.totalCount"
+        [pageSize]="pageSize()"
+        [pageIndex]="pageIndex()"
+        [pageSizeOptions]="[5, 10, 20]"
+        (page)="onPageChange($event)"
+        showFirstLastButtons
+    >
+    </mat-paginator>
+</ng-container>
+<ng-template #noData>
+    <p>No data to display</p>
+</ng-template>

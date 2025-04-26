@@ -1,0 +1,19 @@
+<mat-accordion>
+    <mat-expansion-panel
+        (opened)="filterPanelState.set(true)"
+        (closed)="filterPanelState.set(false)"
+    >
+        <mat-expansion-panel-header>
+            <mat-panel-description>Filter (s)</mat-panel-description>
+        </mat-expansion-panel-header>
+        <mat-form-field appearance="outline">
+            <mat-label>Name</mat-label>
+            <input
+                matInput
+                type="text"
+                [formControl]="filterControl"
+                placeholder="Name"
+            />
+        </mat-form-field>
+    </mat-expansion-panel>
+</mat-accordion>

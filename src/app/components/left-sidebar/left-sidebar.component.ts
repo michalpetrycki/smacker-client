@@ -85,20 +85,20 @@ export class LeftSidebarComponent implements OnInit {
     }
 
     removeCategory(categoryPid: string): void {
-        this.categoryService
-            .deleteCategory(categoryPid)
-            .subscribe((deletedCount: number) => {
-                if (deletedCount > 0) {
-                    this.snackbar.displayMessage(
-                        'Category successfully deleted'
-                    );
-                    this.refresh$.next();
-                } else {
-                    this.snackbar.displayErrorMessage(
-                        'Error during deleting category'
-                    );
-                }
-            });
+        // this.categoryService
+        //     .deleteCategory(categoryPid)
+        //     .subscribe((deletedCount: boolean) => {
+        //         if (deletedCount > 0) {
+        //             this.snackbar.displayMessage(
+        //                 'Category successfully deleted'
+        //             );
+        //             this.refresh$.next();
+        //         } else {
+        //             this.snackbar.displayErrorMessage(
+        //                 'Error during deleting category'
+        //             );
+        //         }
+        //     });
     }
 
     toRecipeCategory(fields: DialogFields): CreateRecipeCategoryAPI {

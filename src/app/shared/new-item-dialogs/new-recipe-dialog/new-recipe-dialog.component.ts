@@ -108,14 +108,22 @@ export class NewRecipeDialogComponent {
     toolsFormGroup: FormGroup;
     readonly currentTool = model('');
     readonly selectedTools: WritableSignal<ToolAPI[]> = signal([]);
-    readonly toolsOptions = toSignal(this.toolService.getTools());
+    readonly toolsOptions = toSignal(
+        this.toolService.getTools({
+            pageNo: 0,
+            pageSize: 0,
+            sortBy: 'name',
+            sortDirection: '',
+        })
+    );
     readonly filteredTools = computed(() => {
         const currentTool = this.currentTool()?.toLowerCase();
-        return currentTool
-            ? this.toolsOptions()?.filter((tool) =>
-                  tool.name.toLowerCase().includes(currentTool)
-              )
-            : this.toolsOptions()?.slice();
+        return [];
+        // return currentTool
+        //     ? this.toolsOptions()?.filter((tool) =>
+        //           tool.name.toLowerCase().includes(currentTool)
+        //       )
+        //     : this.toolsOptions()?.slice();
     });
 
     selectedTool(event: MatAutocompleteSelectedEvent): void {

@@ -17,7 +17,7 @@ export class SimpleItemDialogComponent {
         new EventEmitter<DialogFields>();
     newItemName = '';
     submit(): void {
-        this.newItemRequest.next({
+        this.newItemRequest.emit({
             name: this.newItemName,
         });
     }

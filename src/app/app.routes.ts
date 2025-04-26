@@ -70,4 +70,16 @@ export const routes: Routes = [
             },
         ],
     },
+    {
+        path: 'recipe-categories',
+        children: [
+            {
+                path: '',
+                loadComponent: () =>
+                    import(
+                        './recipe-category/recipe-category-list/recipe-category-list.component'
+                    ).then((c) => c.RecipeCategoryListComponent),
+            },
+        ],
+    },
 ];

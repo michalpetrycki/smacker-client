@@ -1,22 +1,26 @@
 import { CommonModule } from '@angular/common';
 import {
     Component,
-    ElementRef,
+    effect,
     EventEmitter,
-    Input,
+    input,
     OnInit,
     Output,
-    QueryList,
+    signal,
     ViewChild,
-    ViewChildren,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import {
+    MatPaginator,
+    MatPaginatorModule,
+    PageEvent,
+} from '@angular/material/paginator';
+import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
+import { PaginatedResponse } from 'src/app/shared/models/PaginatedResponse';
 import { DialogFields } from 'src/app/shared/new-item-dialogs/new-recipe-category-dialog/new-recipe-category-dialog.component';
-import { MatDrawer, MatSidenavModule } from '@angular/material/sidenav';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
+import { TableFilterComponent } from 'src/app/shared/table-filter/table-filter.component';
 
 @Component({
     selector: 'app-simple-table',
@@ -26,84 +30,82 @@ import { MatInputModule } from '@angular/material/input';
         MatButtonModule,
         FormsModule,
         CommonModule,
-        MatSidenavModule,
-        MatFormFieldModule,
-        MatInputModule,
+        MatPaginatorModule,
+        MatSortModule,
+        TableFilterComponent,
     ],
     templateUrl: './simple-table.component.html',
     styleUrl: './simple-table.component.scss',
 })
 export class SimpleTableComponent<T> implements OnInit {
-    @Input() dataSource: T[] = [];
-    @Input() displayNameProperty = '';
-    @Input() itemType = '';
-    @Output() newItemRequest: EventEmitter<DialogFields> =
-        new EventEmitter<DialogFields>();
+    displayedColumns: string[] = ['update', 'delete'];
+    pageSize = signal<number>(5);
+    pageIndex = signal<number>(0);
+    filter = signal<string | undefined>(undefined);
+    sort = signal<{ active: string; direction: 'asc' | 'desc' | '' }>({
+        active: 'toolName',
+        direction: 'asc',
+    });
+
+    paginatedResponse = input<PaginatedResponse<T>>();
+    editingRowId = input<string>();
+    displayNameProperty = input<string>();
     @Output() updateItemRequest: EventEmitter<DialogFields> =
         new EventEmitter<DialogFields>();
     @Output() deleteItemRequest: EventEmitter<string> =
         new EventEmitter<string>();
-    @ViewChild('drawer') drawer!: MatDrawer;
-    @ViewChildren('editInput') editInputs!: QueryList<ElementRef>;
-    @ViewChildren('updateButton') updateButtons!: QueryList<ElementRef>;
-    displayedColumns: string[] = ['update', 'delete'];
+    @Output() pageRequest: EventEmitter<Pagination> =
+        new EventEmitter<Pagination>();
 
-    editingRowId: string | null = null;
-    formData: DialogFields = {};
-    originalFormData: DialogFields = {};
-    isEditing = false;
+    @ViewChild(MatPaginator) paginator!: MatPaginator;
+    @ViewChild(MatSort) matSort!: MatSort;
 
-    /** Disables "Save" button when there is no change in input */
-    get changesDetected(): boolean {
-        return this.formData['name'] !== this.originalFormData['name'];
+    constructor() {
+        effect(() => {
+            const pagination: Pagination = {
+                pageNo: this.pageIndex(),
+                pageSize: this.pageSize(),
+                sortBy: this.sort().active,
+                sortDirection: this.sort().direction,
+                filter: this.filter(),
+            };
+            this.pageRequest.emit(pagination);
+        });
     }
 
     ngOnInit(): void {
-        this.displayedColumns.splice(0, 0, this.displayNameProperty);
+        this.displayedColumns.splice(0, 0, this.displayNameProperty()!);
     }
 
-    addNew(): void {
-        this.isEditing = false;
-        this.drawer.open();
-    }
-
-    /** Opens left drawer */
     editRow(item: DialogFields): void {
-        this.isEditing = true;
-        this.editingRowId = item['publicId'];
-        this.formData = { ...item };
-        this.originalFormData = { ...item };
-        this.drawer.open();
-    }
-
-    /** Saves currently edited row */
-    saveRow(row?: DialogFields): void {
-        const fields: DialogFields = { ...row, ...this.formData };
-        if (this.isEditing) {
-            this.editingRowId = null;
-            this.isEditing = false;
-            this.updateItemRequest.next(fields);
-        } else {
-            this.newItemRequest.next(fields);
-        }
-        this.drawer.close();
-    }
-
-    cancelEdit(): void {
-        this.editingRowId = null;
-        this.formData = {};
-        this.originalFormData = {};
-        this.isEditing = false;
-        this.drawer.close();
+        this.updateItemRequest.emit(item);
     }
 
     deleteItem(publicId: string): void {
-        this.deleteItemRequest.next(publicId);
+        this.deleteItemRequest.emit(publicId);
     }
 
-    onDrawerClosed(): void {
-        this.editingRowId = null;
-        this.formData = {};
-        this.originalFormData = {};
+    onPageChange(event: PageEvent): void {
+        this.pageIndex.set(event.pageIndex);
+        this.pageSize.set(event.pageSize);
     }
+
+    onSortChange(event: Sort): void {
+        this.sort.set({
+            active: event.active,
+            direction: event.direction,
+        });
+    }
+
+    onFilterChange(value: string | undefined): void {
+        this.filter.set(value);
+    }
+}
+
+export interface Pagination {
+    pageNo: number;
+    pageSize: number;
+    sortBy: string;
+    sortDirection: 'asc' | 'desc' | '';
+    filter?: string;
 }
