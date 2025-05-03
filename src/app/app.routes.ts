@@ -71,6 +71,30 @@ export const routes: Routes = [
         ],
     },
     {
+        path: 'products',
+        children: [
+            {
+                path: '',
+                loadComponent: () =>
+                    import(
+                        './product/product-list/product-list.component'
+                    ).then((c) => c.ProductListComponent),
+            },
+        ],
+    },
+    {
+        path: 'product-categories',
+        children: [
+            {
+                path: '',
+                loadComponent: () =>
+                    import(
+                        './product-category/product-category-list/product-category-list.component'
+                    ).then((c) => c.ProductCategoryListComponent),
+            },
+        ],
+    },
+    {
         path: 'recipe-categories',
         children: [
             {

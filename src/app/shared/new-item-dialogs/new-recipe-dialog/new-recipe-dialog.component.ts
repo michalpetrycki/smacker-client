@@ -29,14 +29,13 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import {
-    ProductAPI,
-    ProductService,
-} from 'src/app/services/product/product.service';
+
 import { MatButtonModule } from '@angular/material/button';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { ToolAPI } from 'src/app/shared/models/ToolAPI';
 import { ToolService } from 'src/app/tool/tool-service/tool.service';
+import { ProductService } from 'src/app/product/product-service/product/product.service';
+import { ProductAPI } from 'src/app/shared/models/ProductAPI';
 
 @Component({
     selector: 'app-new-recipe-dialog',
@@ -73,14 +72,21 @@ export class NewRecipeDialogComponent {
     productsFormGroup: FormGroup;
     readonly currentProduct = model('');
     readonly selectedProducts: WritableSignal<ProductAPI[]> = signal([]);
-    readonly productsOptions = toSignal(this.productService.getProducts());
+    readonly productsOptions = toSignal(
+        this.productService.getProducts({
+            pageNo: 0,
+            pageSize: 5,
+            sortBy: 'productName',
+            sortDirection: 'asc',
+        })
+    );
     readonly filteredProducts = computed(() => {
         const currentProduct = this.currentProduct()?.toLowerCase();
         return currentProduct
-            ? this.productsOptions()?.filter((product) =>
+            ? this.productsOptions()?.results.filter((product) =>
                   product.name.toLowerCase().includes(currentProduct)
               )
-            : this.productsOptions()?.slice();
+            : this.productsOptions()?.results.slice();
     });
 
     selectedProduct(event: MatAutocompleteSelectedEvent): void {

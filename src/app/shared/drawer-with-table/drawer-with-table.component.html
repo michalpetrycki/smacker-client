@@ -6,7 +6,7 @@
         (closed)="onDrawerClosed()"
     >
         <div class="drawer-form">
-            <h2>{{ isEditing ? "Edit tool" : "Add tool" }}</h2>
+            <h4>{{ isEditing ? "Edit " + itemType : "Add " + itemType }}</h4>
             <div class="drawer-buttons">
                 <button
                     mat-flat-button
@@ -28,13 +28,18 @@
     </mat-drawer>
     <mat-drawer-content
         ><div class="drawer-content-div">
-            <button mat-flat-button (click)="addNew()">Add new</button>
+            <h4>Click here to add new {{ itemType }}</h4>
+            <button mat-flat-button (click)="addNew()">
+                <ng-icon name="hugeAdd02"></ng-icon>
+                Add new
+            </button>
         </div>
         <div class="drawer-content-div">
             <app-simple-table
                 [paginatedResponse]="paginatedResponse()"
                 [displayNameProperty]="displayNameProperty()"
                 [editingRowId]="editingRowId()"
+                [noItemsMessage]="noItemsMessage()"
                 (deleteItemRequest)="deleteItem($event)"
                 (updateItemRequest)="updateItem($event)"
                 (pageRequest)="requestNextPage($event)"

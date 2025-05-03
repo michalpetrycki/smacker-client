@@ -1,0 +1,21 @@
+<ng-container
+    *ngIf="paginatedResponse$ | async as paginatedResponse; else loading"
+>
+    <app-drawer-with-table
+        [paginatedResponse]="paginatedResponse"
+        [displayNameProperty]="displayNameProperty"
+        [itemType]="'product'"
+        [noItemsMessage]="'products'"
+        (newItemRequest)="addProduct($event)"
+        (updateItemRequest)="updateProduct($event)"
+        (deleteItemRequest)="deleteProduct($event)"
+        (nextPageRequest)="requestNextPage($event)"
+    >
+    </app-drawer-with-table>
+    <ng-container *ngIf="paginatedResponse.totalCount === 0">
+        <h2>No proucts found. Click here to add new product</h2>
+    </ng-container>
+</ng-container>
+<ng-template #loading>
+    <h2>Loading...</h2>
+</ng-template>

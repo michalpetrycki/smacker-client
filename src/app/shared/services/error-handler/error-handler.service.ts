@@ -20,7 +20,9 @@ export function errorInterceptor(
             } else {
                 console.error('Not a httpErrorResponse: ' + error);
             }
-            snackbar.displayErrorMessage((error as any).error?.message);
+            snackbar.displayErrorMessage(
+                (error as any).message ?? (error as any).error?.message
+            );
             return throwError(() => error);
         })
     );

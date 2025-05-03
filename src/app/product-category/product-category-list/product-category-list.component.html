@@ -1,0 +1,18 @@
+<ng-container
+    *ngIf="paginatedResponse$ | async as paginatedResponse; else loading"
+>
+    <app-drawer-with-table
+        [paginatedResponse]="paginatedResponse"
+        [displayNameProperty]="displayNameProperty"
+        [itemType]="'product category'"
+        [noItemsMessage]="'product categories'"
+        (newItemRequest)="addProductCategory($event)"
+        (updateItemRequest)="updateProductCategory($event)"
+        (deleteItemRequest)="deleteProductCategory($event)"
+        (nextPageRequest)="requestNextPage($event)"
+    >
+    </app-drawer-with-table>
+</ng-container>
+<ng-template #loading>
+    <h2>Loading...</h2>
+</ng-template>

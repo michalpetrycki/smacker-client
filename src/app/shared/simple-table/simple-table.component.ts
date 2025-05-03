@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import {
     Component,
+    computed,
     effect,
     EventEmitter,
     input,
@@ -39,17 +40,12 @@ import { TableFilterComponent } from 'src/app/shared/table-filter/table-filter.c
 })
 export class SimpleTableComponent<T> implements OnInit {
     displayedColumns: string[] = ['update', 'delete'];
-    pageSize = signal<number>(5);
-    pageIndex = signal<number>(0);
-    filter = signal<string | undefined>(undefined);
-    sort = signal<{ active: string; direction: 'asc' | 'desc' | '' }>({
-        active: 'toolName',
-        direction: 'asc',
-    });
-
+    showTable = computed(() => this.paginatedResponse()?.totalCount! > 0);
     paginatedResponse = input<PaginatedResponse<T>>();
     editingRowId = input<string>();
     displayNameProperty = input<string>();
+    noItemsMessage = input<string>();
+
     @Output() updateItemRequest: EventEmitter<DialogFields> =
         new EventEmitter<DialogFields>();
     @Output() deleteItemRequest: EventEmitter<string> =
@@ -60,8 +56,18 @@ export class SimpleTableComponent<T> implements OnInit {
     @ViewChild(MatPaginator) paginator!: MatPaginator;
     @ViewChild(MatSort) matSort!: MatSort;
 
+    pageSize = signal<number>(5);
+    pageIndex = signal<number>(0);
+    filter = signal<string | undefined>(undefined);
+    sort = signal<{ active: string; direction: 'asc' | 'desc' | '' }>({
+        active: '',
+        direction: 'asc',
+    });
+
     constructor() {
         effect(() => {
+            this.sort().active = this.displayNameProperty() ?? '';
+
             const pagination: Pagination = {
                 pageNo: this.pageIndex(),
                 pageSize: this.pageSize(),

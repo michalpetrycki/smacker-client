@@ -10,15 +10,23 @@
     }
 }
 
+.mat-drawer-container {
+    padding-bottom: 4rem;
+}
+
 .mat-drawer-content {
     display: flex !important;
-    margin-top: 4em;
+    margin-top: 3em;
+}
+
+.drawer-content-div {
+    align-content: center;
 }
 
 .drawer-content-div:first-of-type {
     margin-left: auto;
     margin-right: auto;
-    align-content: center;
+    text-align: center;
 }
 
 .drawer-content-div:last-of-type {

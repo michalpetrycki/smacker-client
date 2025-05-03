@@ -1,5 +1,7 @@
+import { NgIf } from '@angular/common';
 import {
     Component,
+    effect,
     EventEmitter,
     input,
     Input,
@@ -19,11 +21,14 @@ import {
     Pagination,
     SimpleTableComponent,
 } from 'src/app/shared/simple-table/simple-table.component';
+import { hugeAdd02 } from '@ng-icons/huge-icons';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 
 @Component({
     selector: 'app-drawer-with-table',
     standalone: true,
     imports: [
+        NgIf,
         SimpleTableComponent,
         MatSidenavModule,
         MatFormFieldModule,
@@ -31,6 +36,12 @@ import {
         MatTableModule,
         MatButtonModule,
         FormsModule,
+        NgIcon,
+    ],
+    providers: [
+        provideIcons({
+            hugeAdd02,
+        }),
     ],
     templateUrl: './drawer-with-table.component.html',
     styleUrl: './drawer-with-table.component.scss',
@@ -43,6 +54,7 @@ export class DrawerWithTableComponent<T> {
 
     paginatedResponse = input<PaginatedResponse<T>>();
     displayNameProperty = input<string>();
+    noItemsMessage = input<string>();
     @Input() itemType = '';
     editingRowId = signal<string | undefined>(undefined);
     @Output() newItemRequest: EventEmitter<DialogFields> =

@@ -1,72 +1,108 @@
-<ng-container
-    *ngIf="
-        paginatedResponse() &&
-            paginatedResponse()?.results &&
-            (paginatedResponse()?.results)!.length > 0;
-        else noData
-    "
->
+<ng-container *ngIf="showTable; else noData">
     <div class="filter">
         <app-table-filter
             (filterRequest)="onFilterChange($event)"
         ></app-table-filter>
     </div>
-    <table
-        mat-table
-        [dataSource]="paginatedResponse()!.results"
-        matSort
-        (matSortChange)="onSortChange($event)"
-    >
-        <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header="toolName">
-                Name
-            </th>
-            <td mat-cell *matCellDef="let row">
-                {{ row.name }}
-            </td>
-        </ng-container>
+    <div class="table-wrapper">
+        <div class="table-container">
+            <table
+                mat-table
+                [dataSource]="paginatedResponse()!.results"
+                matSort
+                (matSortChange)="onSortChange($event)"
+                class="full-height-table"
+            >
+                <ng-container matColumnDef="{{ displayNameProperty() }}">
+                    <th
+                        mat-header-cell
+                        *matHeaderCellDef
+                        mat-sort-header="{{ displayNameProperty() }}"
+                    >
+                        {{ displayNameProperty() }}
+                    </th>
+                    <td mat-cell *matCellDef="let row">
+                        {{ row.name }}
+                    </td>
+                </ng-container>
 
-        <ng-container matColumnDef="update">
-            <th mat-header-cell *matHeaderCellDef></th>
-            <td mat-cell *matCellDef="let row">
-                <button
-                    mat-flat-button
-                    (click)="editRow(row)"
-                    #updateButton
-                    [attr.data-public-id]="row.publicId"
-                >
-                    Update
-                </button>
-            </td>
-        </ng-container>
+                <ng-container matColumnDef="update">
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell *matCellDef="let row">
+                        <button
+                            mat-flat-button
+                            (click)="editRow(row)"
+                            #updateButton
+                            [attr.data-public-id]="row.publicId"
+                        >
+                            Update
+                        </button>
+                    </td>
+                </ng-container>
 
-        <ng-container matColumnDef="delete">
-            <th mat-header-cell *matHeaderCellDef></th>
-            <td mat-cell *matCellDef="let row">
-                <button mat-flat-button (click)="deleteItem(row.publicId)">
-                    Delete
-                </button>
-            </td>
-        </ng-container>
+                <ng-container matColumnDef="delete">
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell *matCellDef="let row">
+                        <button
+                            mat-flat-button
+                            (click)="deleteItem(row.publicId)"
+                        >
+                            Delete
+                        </button>
+                    </td>
+                </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr
-            mat-row
-            *matRowDef="let row; columns: displayedColumns"
-            [ngClass]="{ 'edited-row': editingRowId() === row.publicId }"
-        ></tr>
-    </table>
-
-    <mat-paginator
-        [length]="paginatedResponse()?.totalCount"
-        [pageSize]="pageSize()"
-        [pageIndex]="pageIndex()"
-        [pageSizeOptions]="[5, 10, 20]"
-        (page)="onPageChange($event)"
-        showFirstLastButtons
-    >
-    </mat-paginator>
+                <tr
+                    mat-header-row
+                    *matHeaderRowDef="displayedColumns"
+                    class="header-row"
+                ></tr>
+                <tr
+                    mat-row
+                    *matRowDef="let row; columns: displayedColumns"
+                    [ngClass]="{
+                        'edited-row': editingRowId() === row.publicId
+                    }"
+                ></tr>
+            </table>
+        </div>
+        <mat-paginator
+            [length]="paginatedResponse()?.totalCount"
+            [pageSize]="pageSize()"
+            [pageIndex]="pageIndex()"
+            [pageSizeOptions]="[5, 10, 20]"
+            (page)="onPageChange($event)"
+            showFirstLastButtons
+        >
+        </mat-paginator>
+    </div>
 </ng-container>
 <ng-template #noData>
-    <p>No data to display</p>
+    <h2>No {{ noItemsMessage() }} found.</h2>
+
+    <div>
+        <table mat-table [dataSource]="[1, 2, 3, 4, 5]">
+            <ng-container matColumnDef="{{ displayNameProperty() }}">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let row" class="skeleton-cell"></td>
+            </ng-container>
+
+            <ng-container matColumnDef="update">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let row" class="skeleton-cell"></td>
+            </ng-container>
+
+            <ng-container matColumnDef="delete">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let row" class="skeleton-cell"></td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr
+                mat-row
+                *matRowDef="let row; columns: displayedColumns"
+                class="skeleton-row"
+            ></tr>
+        </table>
+    </div>
 </ng-template>
