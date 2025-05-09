@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CreateProductCategoryAPI } from 'src/app/shared/models/CreateProductCategoryAPI';
+import { ProductCategoryCreateAPI } from 'src/app/shared/models/ProductCategoryCreateAPI';
 import { PaginatedResponse } from 'src/app/shared/models/PaginatedResponse';
 import { ProductCategoryAPI } from 'src/app/shared/models/ProductCategoryAPI';
 import { Pagination } from 'src/app/shared/simple-table/simple-table.component';
@@ -16,11 +16,17 @@ export class ProductCategoryService {
     productCategoriesUrl = `${this.apiBase}/product-categories`;
 
     createProductCategory(
-        createProductCategoryAPI: CreateProductCategoryAPI
+        createProductCategoryAPI: ProductCategoryCreateAPI
     ): Observable<ProductCategoryAPI> {
         return this.http.post<ProductCategoryAPI>(
             this.productCategoriesUrl,
             createProductCategoryAPI
+        );
+    }
+
+    getAllProductCategories(): Observable<ProductCategoryAPI[]> {
+        return this.http.get<ProductCategoryAPI[]>(
+            `${this.productCategoriesUrl}/all`
         );
     }
 

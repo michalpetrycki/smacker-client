@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CreateToolAPI } from 'src/app/shared/models/CreateToolAPI';
+import { ToolCreateAPI } from 'src/app/shared/models/ToolCreateAPI';
 import { PaginatedResponse } from 'src/app/shared/models/PaginatedResponse';
 import { ToolAPI } from 'src/app/shared/models/ToolAPI';
 import { Pagination } from 'src/app/shared/simple-table/simple-table.component';
@@ -15,7 +15,7 @@ export class ToolService {
     apiBase = environment.baseUrl;
     toolsUrl = `${this.apiBase}/tools`;
 
-    createTool(createToolAPI: CreateToolAPI): Observable<ToolAPI> {
+    createTool(createToolAPI: ToolCreateAPI): Observable<ToolAPI> {
         return this.http.post<ToolAPI>(this.toolsUrl, createToolAPI);
     }
 

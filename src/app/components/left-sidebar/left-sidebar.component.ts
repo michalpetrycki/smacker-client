@@ -103,7 +103,7 @@ export class LeftSidebarComponent implements OnInit {
 
     toRecipeCategory(fields: DialogFields): CreateRecipeCategoryAPI {
         return {
-            name: fields['name'],
+            name: fields['name'] as string,
         };
     }
 }

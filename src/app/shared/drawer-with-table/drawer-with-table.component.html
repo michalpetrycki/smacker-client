@@ -6,29 +6,18 @@
         (closed)="onDrawerClosed()"
     >
         <div class="drawer-form">
-            <h4>{{ isEditing ? "Edit " + itemType : "Add " + itemType }}</h4>
-            <div class="drawer-buttons">
-                <button
-                    mat-flat-button
-                    [disabled]="!changesDetected"
-                    (click)="saveRow()"
-                >
-                    Save
-                </button>
-                <button mat-flat-button color="warn" (click)="cancelEdit()">
-                    Cancel
-                </button>
-            </div>
-            <br />
-            <mat-form-field appearance="outline">
-                <mat-label>Tool name</mat-label>
-                <input matInput [(ngModel)]="formData['name']" />
-            </mat-form-field>
+            <app-drawer-entity-builder
+                [type]="formType()"
+                [editItem]="formData"
+                [isEditing]="isEditing"
+                (closed)="onBuilderDrawerClosed()"
+                (addItemRequest)="newItemRequest.emit($event)"
+            ></app-drawer-entity-builder>
         </div>
     </mat-drawer>
     <mat-drawer-content
         ><div class="drawer-content-div">
-            <h4>Click here to add new {{ itemType }}</h4>
+            <h4>Click here to add new {{ itemType() }}</h4>
             <button mat-flat-button (click)="addNew()">
                 <ng-icon name="hugeAdd02"></ng-icon>
                 Add new
@@ -41,7 +30,7 @@
                 [editingRowId]="editingRowId()"
                 [noItemsMessage]="noItemsMessage()"
                 (deleteItemRequest)="deleteItem($event)"
-                (updateItemRequest)="updateItem($event)"
+                (editItemRequest)="editItem($event)"
                 (pageRequest)="requestNextPage($event)"
             ></app-simple-table>
         </div>

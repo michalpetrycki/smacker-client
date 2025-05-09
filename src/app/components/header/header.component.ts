@@ -31,7 +31,7 @@ export class HeaderComponent {
         { name: 'New Recipe', path: '/recipe', icon: 'hugeAddSquare' },
         { name: 'Recipes', path: '/recipes', icon: 'hugeNote03' },
         {
-            name: 'Categories',
+            name: 'Recipe Categories',
             path: '/recipe-categories',
             icon: 'hugeBubbleChatQuestion',
         },

@@ -30,7 +30,7 @@ export class RecipeCategoryListComponent {
 
     addCategory(fields: DialogFields): void {
         this.categoriesService
-            .createCategory({ name: fields['name'] })
+            .createCategory({ name: fields['name'] as string })
             .subscribe((newCategory: RecipeCategoryAPI | null) => {
                 if (newCategory) {
                     this.snackbarService.displayMessage(
@@ -69,8 +69,8 @@ export class RecipeCategoryListComponent {
 
     private toRecipeCategoryAPI(fields: DialogFields): RecipeCategoryAPI {
         return {
-            publicId: fields['publicId'],
-            name: fields['name'],
+            publicId: fields['publicId'] as string,
+            name: fields['name'] as string,
         };
     }
 }

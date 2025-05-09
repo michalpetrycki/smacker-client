@@ -21,7 +21,7 @@ export function errorInterceptor(
                 console.error('Not a httpErrorResponse: ' + error);
             }
             snackbar.displayErrorMessage(
-                (error as any).message ?? (error as any).error?.message
+                (error as any).error?.message ?? (error as any).message
             );
             return throwError(() => error);
         })

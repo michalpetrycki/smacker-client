@@ -142,8 +142,6 @@ export class NewRecipeDialogComponent {
     addTool(event: MatChipInputEvent): void {
         const value = (event.value || '').trim();
 
-        debugger;
-
         if (value) {
             // this.selectedTools.update(tools => [...tools, value]);
         }

@@ -1,0 +1,60 @@
+<form [formGroup]="formGroup">
+    <mat-form-field appearance="outline">
+        <mat-label>Name</mat-label>
+        <input matInput type="text" formControlName="name" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>Description</mat-label>
+        <input
+            matInput
+            type="text"
+            formControlName="description"
+            matTooltip="Product's short description"
+        />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>Carbs</mat-label>
+        <input
+            matInput
+            type="number"
+            formControlName="carbs"
+            matTooltip="Carbs per 100g"
+        />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>Fats</mat-label>
+        <input
+            matInput
+            type="number"
+            formControlName="fats"
+            matTooltip="Fats per 100g"
+        />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>Fiber</mat-label>
+        <input
+            matInput
+            type="number"
+            formControlName="fiber"
+            matTooltip="Fiber per 100g"
+        />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>Proteins</mat-label>
+        <input
+            matInput
+            type="number"
+            formControlName="proteins"
+            matTooltip="Proteins per 100g"
+        />
+    </mat-form-field>
+    <!-- <mat-form-field appearance="outline">
+        <mat-label>Product Categories</mat-label>
+        <input matInput type="text" formControlName="categories" />
+    </mat-form-field> -->
+    <ng-template matStepLabel>Pick categories of the product</ng-template>
+
+    <app-product-autocomplete
+        [categoriesControl]="categoriesFormControl"
+    ></app-product-autocomplete>
+</form>

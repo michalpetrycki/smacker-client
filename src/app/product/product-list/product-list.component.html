@@ -5,6 +5,7 @@
         [paginatedResponse]="paginatedResponse"
         [displayNameProperty]="displayNameProperty"
         [itemType]="'product'"
+        [formType]="this.formType"
         [noItemsMessage]="'products'"
         (newItemRequest)="addProduct($event)"
         (updateItemRequest)="updateProduct($event)"

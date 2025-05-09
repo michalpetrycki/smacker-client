@@ -1,0 +1,53 @@
+<ng-template matStepLabel>Pick categories of the product</ng-template>
+
+<ng-container>
+    <mat-form-field appearance="fill" class="category-form-field">
+        <mat-label>Pick categories</mat-label>
+
+        <mat-chip-grid
+            #categoriesChipGrid
+            aria-label="Product categories selection"
+        >
+            @for (category of categoriesControl.value; track category.publicId)
+            {
+            <mat-chip-row (removed)="removeCategory(category)">
+                {{ category.name }}
+                <button
+                    matChipRemove
+                    [attr.aria-label]="'remove ' + category.name"
+                >
+                    <mat-icon>cancel</mat-icon>
+                </button>
+            </mat-chip-row>
+            }
+        </mat-chip-grid>
+
+        <input
+            placeholder="Add category..."
+            #categoryInput
+            [formControl]="categoryInputControl"
+            [matChipInputFor]="categoriesChipGrid"
+            [matAutocomplete]="categoriesAutoComplete"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            (matChipInputTokenEnd)="addCategoryFromInput($event)"
+            matInput
+        />
+
+        <mat-autocomplete
+            #categoriesAutoComplete="matAutocomplete"
+            (optionSelected)="selectCategoryFromAutocomplete($event)"
+        >
+            @for (category of filteredCategories$ | async; track
+            category.publicId) {
+            <mat-option [value]="category">
+                {{ category.name }}
+            </mat-option>
+            }
+        </mat-autocomplete>
+
+        @if (categoriesControl.touched &&
+        categoriesControl.hasError('required')) {
+        <mat-error>At least one category is required.</mat-error>
+        }
+    </mat-form-field>
+</ng-container>

@@ -1,15 +1,12 @@
-import { NgIf } from '@angular/common';
 import {
     Component,
-    effect,
     EventEmitter,
     input,
-    Input,
     Output,
     signal,
     ViewChild,
 } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormGroup, FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -23,12 +20,15 @@ import {
 } from 'src/app/shared/simple-table/simple-table.component';
 import { hugeAdd02 } from '@ng-icons/huge-icons';
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+    DrawerEntityBuilderComponent,
+    FormType,
+} from '../drawer-entity-builder/drawer-entity-builder.component';
 
 @Component({
     selector: 'app-drawer-with-table',
     standalone: true,
     imports: [
-        NgIf,
         SimpleTableComponent,
         MatSidenavModule,
         MatFormFieldModule,
@@ -37,6 +37,7 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
         MatButtonModule,
         FormsModule,
         NgIcon,
+        DrawerEntityBuilderComponent,
     ],
     providers: [
         provideIcons({
@@ -53,9 +54,10 @@ export class DrawerWithTableComponent<T> {
     isEditing = false;
 
     paginatedResponse = input<PaginatedResponse<T>>();
-    displayNameProperty = input<string>();
-    noItemsMessage = input<string>();
-    @Input() itemType = '';
+    displayNameProperty = input<string>('');
+    noItemsMessage = input<string>('');
+    itemType = input<string>('');
+    formType = input<FormType>('other');
     editingRowId = signal<string | undefined>(undefined);
     @Output() newItemRequest: EventEmitter<DialogFields> =
         new EventEmitter<DialogFields>();
@@ -66,15 +68,18 @@ export class DrawerWithTableComponent<T> {
     @Output() nextPageRequest: EventEmitter<Pagination> =
         new EventEmitter<Pagination>();
     @ViewChild('drawer') drawer!: MatDrawer;
-
-    /** Disables "Save" button when there is no change in input */
-    get changesDetected(): boolean {
-        return this.formData['name'] !== this.originalFormData['name'];
-    }
+    @ViewChild(DrawerEntityBuilderComponent)
+    drawerEntityBuilder!: DrawerEntityBuilderComponent<any>;
 
     onDrawerClosed(): void {
         this.formData = {};
         this.originalFormData = {};
+        this.drawerEntityBuilder.clearForm();
+    }
+
+    onBuilderDrawerClosed(): void {
+        this.onDrawerClosed();
+        this.drawer.close();
     }
 
     cancelEdit(): void {
@@ -90,9 +95,9 @@ export class DrawerWithTableComponent<T> {
         this.drawer.open();
     }
 
-    updateItem(item: DialogFields): void {
+    editItem(item: DialogFields): void {
         this.isEditing = true;
-        this.editingRowId.set(item['publicId']);
+        this.editingRowId.set(item['publicId'] as string);
         this.formData = { ...item };
         this.originalFormData = { ...item };
         this.drawer.open();

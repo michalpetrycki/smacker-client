@@ -44,7 +44,7 @@ export class ProductCategoryListComponent {
 
     addProductCategory(fields: DialogFields): void {
         this.productCategoryService
-            .createProductCategory({ name: fields['name'] })
+            .createProductCategory({ name: fields['name'] as string })
             .subscribe((newProductCategory: ProductCategoryAPI | null) => {
                 if (newProductCategory) {
                     this.snackbarService.displayMessage(
@@ -85,8 +85,8 @@ export class ProductCategoryListComponent {
 
     private toProductCategoryAPI(fields: DialogFields): ProductCategoryAPI {
         return {
-            publicId: fields['publicId'],
-            name: fields['name'],
+            publicId: fields['publicId'] as string,
+            name: fields['name'] as string,
         };
     }
 }

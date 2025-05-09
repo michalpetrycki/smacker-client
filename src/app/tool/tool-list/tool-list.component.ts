@@ -50,7 +50,7 @@ export class ToolListComponent {
 
     addTool(fields: DialogFields): void {
         this.toolsService
-            .createTool({ name: fields['name'] })
+            .createTool({ name: fields['name'] as string })
             .subscribe((newTool: ToolAPI | null) => {
                 if (newTool) {
                     this.snackbarService.displayMessage(
@@ -87,8 +87,8 @@ export class ToolListComponent {
 
     private toToolAPI(fields: DialogFields): ToolAPI {
         return {
-            publicId: fields['publicId'],
-            name: fields['name'],
+            publicId: fields['publicId'] as string,
+            name: fields['name'] as string,
         };
     }
 }

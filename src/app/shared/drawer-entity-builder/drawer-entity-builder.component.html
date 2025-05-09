@@ -1,0 +1,22 @@
+<form>
+    <ng-template #formHost></ng-template>
+    <div>
+        <button
+            mat-flat-button
+            type="button"
+            (click)="formComponent?.instance?.onSubmit()"
+            [disabled]="buttonDisabled"
+        >
+            <ng-icon name="hugeAdd02"></ng-icon>
+            {{ isEditing ? "Edit item" : "Add new" }}
+        </button>
+        <button
+            mat-flat-button
+            type="button"
+            (click)="formComponent?.instance?.onCancel()"
+        >
+            <ng-icon name="hugeCancel02"></ng-icon>
+            Cancel
+        </button>
+    </div>
+</form>

@@ -46,7 +46,7 @@ export class SimpleTableComponent<T> implements OnInit {
     displayNameProperty = input<string>();
     noItemsMessage = input<string>();
 
-    @Output() updateItemRequest: EventEmitter<DialogFields> =
+    @Output() editItemRequest: EventEmitter<DialogFields> =
         new EventEmitter<DialogFields>();
     @Output() deleteItemRequest: EventEmitter<string> =
         new EventEmitter<string>();
@@ -84,7 +84,7 @@ export class SimpleTableComponent<T> implements OnInit {
     }
 
     editRow(item: DialogFields): void {
-        this.updateItemRequest.emit(item);
+        this.editItemRequest.emit(item);
     }
 
     deleteItem(publicId: string): void {
