@@ -1,42 +1,25 @@
-import { ENTER, COMMA } from '@angular/cdk/keycodes';
 import {
     Component,
-    computed,
     effect,
     EnvironmentInjector,
     EventEmitter,
     inject,
     input,
-    model,
     OnInit,
     Output,
     runInInjectionContext,
-    signal,
-    WritableSignal,
 } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
 import {
-    FormArray,
-    FormBuilder,
     FormControl,
     FormGroup,
     ReactiveFormsModule,
     Validators,
 } from '@angular/forms';
-import {
-    MatAutocompleteModule,
-    MatAutocompleteSelectedEvent,
-} from '@angular/material/autocomplete';
-import { MatButtonModule } from '@angular/material/button';
-import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
-import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { BehaviorSubject, Subject } from 'rxjs';
-import { ProductCategoryService } from 'src/app/product-category/product-category-service/product-category.service';
+import { BehaviorSubject } from 'rxjs';
 import { ProductCategoryAPI } from 'src/app/shared/models/ProductCategoryAPI';
 import { ProductCreateAPI } from 'src/app/shared/models/ProductCreateAPI';
-import { DialogFields } from 'src/app/shared/new-item-dialogs/new-recipe-category-dialog/new-recipe-category-dialog.component';
 import { ProductAutocompleteComponent } from '../product-autocomplete/product-autocomplete.component';
 
 @Component({
@@ -46,10 +29,6 @@ import { ProductAutocompleteComponent } from '../product-autocomplete/product-au
         ReactiveFormsModule,
         MatInputModule,
         MatTooltipModule,
-        MatButtonModule,
-        MatChipsModule,
-        MatAutocompleteModule,
-        MatIconModule,
         ProductAutocompleteComponent,
     ],
     templateUrl: './product-form.component.html',
@@ -57,8 +36,6 @@ import { ProductAutocompleteComponent } from '../product-autocomplete/product-au
 })
 export class ProductFormComponent implements OnInit {
     private injector = inject(EnvironmentInjector);
-    private productCategoryService = inject(ProductCategoryService);
-    private fb = inject(FormBuilder);
     data = input<ProductCreateAPI>();
     @Output() submitted = new EventEmitter<ProductCreateAPI>();
     @Output() closeDrawer = new EventEmitter<void>();
@@ -78,7 +55,7 @@ export class ProductFormComponent implements OnInit {
             Validators.min(0),
             Validators.max(100),
             Validators.pattern(/^-?\d+(\.\d+)?$/),
-        ]), // liczba całkowita lub zmiennoprzecinkowa]),
+        ]),
         fiber: new FormControl<number>(0, [
             Validators.min(0),
             Validators.max(100),

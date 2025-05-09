@@ -16,20 +16,20 @@ import {
 } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { BehaviorSubject } from 'rxjs';
-import { ToolAPI } from 'src/app/shared/models/ToolAPI';
-import { ToolCreateAPI } from 'src/app/shared/models/ToolCreateAPI';
+import { RecipeCategoryAPI } from 'src/app/shared/models/RecipeCategoryAPI';
+import { RecipeCategoryCreateAPI } from 'src/app/shared/models/RecipeCategoryCreateAPI';
 
 @Component({
-    selector: 'app-tool-form',
+    selector: 'app-recipe-category-form',
     standalone: true,
     imports: [ReactiveFormsModule, MatInputModule],
-    templateUrl: './tool-form.component.html',
-    styleUrl: './tool-form.component.scss',
+    templateUrl: './recipe-category-form.component.html',
+    styleUrl: './recipe-category-form.component.scss',
 })
-export class ToolFormComponent {
+export class RecipeCategoryFormComponent {
     private injector = inject(EnvironmentInjector);
-    data = input<ToolAPI>();
-    @Output() submitted = new EventEmitter<ToolCreateAPI>();
+    data = input<RecipeCategoryAPI>();
+    @Output() submitted = new EventEmitter<RecipeCategoryCreateAPI>();
     @Output() closeDrawer = new EventEmitter<void>();
 
     disableButton$ = new BehaviorSubject<boolean>(true);
@@ -43,8 +43,8 @@ export class ToolFormComponent {
 
     ngOnInit(): void {
         this.formGroup.valueChanges.subscribe((formValue) => {
-            const tool = this.data();
-            const x = formValue.name === tool?.name;
+            const category = this.data();
+            const x = formValue.name === category?.name;
             this.disableButton$.next(x);
         });
     }
@@ -52,19 +52,19 @@ export class ToolFormComponent {
     ngAfterViewInit(): void {
         runInInjectionContext(this.injector, () => {
             effect(() => {
-                const tool = this.data();
-                if (tool) {
-                    this.formGroup.get('name')?.patchValue(tool.name);
+                const category = this.data();
+                if (category) {
+                    this.formGroup.get('name')?.patchValue(category.name);
                 }
             });
         });
     }
 
     onSubmit(): void {
-        const tool: ToolCreateAPI = {
+        const recipeCategory: RecipeCategoryCreateAPI = {
             name: this.formGroup.get('name')?.value ?? '',
         };
-        this.submitted.emit(tool);
+        this.submitted.emit(recipeCategory);
         this.onCancel();
     }
 

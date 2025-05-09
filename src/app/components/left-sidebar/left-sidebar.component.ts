@@ -1,11 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { MatListModule } from '@angular/material/list';
 import { RouterModule } from '@angular/router';
-import {
-    CreateRecipeCategoryAPI,
-    RecipeCategoryAPI,
-    RecipesCategoryService,
-} from '../../recipe-category/recipe-category-service/recipe-category.service';
+import { RecipeCategoryService } from '../../recipe-category/recipe-category-service/recipe-category.service';
 import { Subject, map, startWith, switchMap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
@@ -24,34 +20,34 @@ import { SnackbarService } from 'src/app/shared/services/snackbar/snackbar.servi
 })
 export class LeftSidebarComponent implements OnInit {
     readonly dialog = inject(MatDialog);
-    readonly categoryService = inject(RecipesCategoryService);
+    // readonly categoryService = inject(RecipesCategoryService);
     readonly snackbar = inject(SnackbarService);
 
-    getItems$ = this.categoryService.getCategories().pipe(takeUntilDestroyed());
+    // getItems$ = this.categoryService.getCategories().pipe(takeUntilDestroyed());
     refresh$ = new Subject<void>();
 
-    navItems$ = this.refresh$.pipe(
-        startWith(null),
-        switchMap(() =>
-            this.getItems$.pipe(
-                map((categories) => this.toNavItems(categories))
-            )
-        )
-    );
+    // navItems$ = this.refresh$.pipe(
+    //     startWith(null),
+    //     switchMap(() =>
+    //         this.getItems$.pipe(
+    //             map((categories) => this.toNavItems(categories))
+    //         )
+    //     )
+    // );
 
     ngOnInit(): void {
         this.refresh$.next();
     }
 
-    toNavItems(categories: RecipeCategoryAPI[]): NavItem[] {
-        return categories.map((category) => {
-            return {
-                route: category.publicId + '',
-                displayName: category.name,
-                isActive: false,
-            };
-        });
-    }
+    // toNavItems(categories: RecipeCategoryAPI[]): NavItem[] {
+    //     return categories.map((category) => {
+    //         return {
+    //             route: category.publicId + '',
+    //             displayName: category.name,
+    //             isActive: false,
+    //         };
+    //     });
+    // }
 
     addCategory(): void {
         this.dialog
@@ -64,22 +60,22 @@ export class LeftSidebarComponent implements OnInit {
             .afterClosed()
             .subscribe((fields: DialogFields) => {
                 if (fields) {
-                    const newCategory: CreateRecipeCategoryAPI =
-                        this.toRecipeCategory(fields);
-                    this.categoryService
-                        .createCategory(newCategory)
-                        .subscribe((createAPI: CreateRecipeCategoryAPI) => {
-                            if (createAPI) {
-                                this.snackbar.displayMessage(
-                                    `Category ${createAPI.name} created`
-                                );
-                                this.refresh$.next();
-                            } else {
-                                this.snackbar.displayErrorMessage(
-                                    'Error during creation of category'
-                                );
-                            }
-                        });
+                    // const newCategory: CreateRecipeCategoryAPI =
+                    //     this.toRecipeCategory(fields);
+                    // this.categoryService
+                    //     .createCategory(newCategory)
+                    //     .subscribe((createAPI: CreateRecipeCategoryAPI) => {
+                    //         if (createAPI) {
+                    //             this.snackbar.displayMessage(
+                    //                 `Category ${createAPI.name} created`
+                    //             );
+                    //             this.refresh$.next();
+                    //         } else {
+                    //             this.snackbar.displayErrorMessage(
+                    //                 'Error during creation of category'
+                    //             );
+                    //         }
+                    //     });
                 }
             });
     }
@@ -101,11 +97,11 @@ export class LeftSidebarComponent implements OnInit {
         //     });
     }
 
-    toRecipeCategory(fields: DialogFields): CreateRecipeCategoryAPI {
-        return {
-            name: fields['name'] as string,
-        };
-    }
+    // toRecipeCategory(fields: DialogFields): CreateRecipeCategoryAPI {
+    //     return {
+    //         name: fields['name'] as string,
+    //     };
+    // }
 }
 
 interface NavItem {

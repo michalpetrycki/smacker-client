@@ -1,18 +1,23 @@
-<ng-container *ngIf="categories$ | async as categories; else loading">
-    <ng-container *ngIf="categories.length > 0; else nodata">
-        <!-- <app-drawer-with-table
-            [paginatedResponse]="categories"
-            [displayNameProperty]="'name'"
-            [itemType]="'recipe category'"
-            (newItemRequest)="addCategory($event)"
-            (updateItemRequest)="updateCategory($event)"
-            (deleteItemRequest)="deleteCategory($event)"
-        >
-        </app-drawer-with-table> -->
+<ng-container
+    *ngIf="paginatedResponse$ | async as paginatedResponse; else loading"
+>
+    <app-drawer-with-table
+        [paginatedResponse]="paginatedResponse"
+        [displayNameProperty]="displayNameProperty"
+        [itemType]="'recipe category'"
+        [formType]="this.formType"
+        [noItemsMessage]="'recipe categories'"
+        (newItemRequest)="addRecipeCategory($event)"
+        (updateItemRequest)="updateRecipeCategory($event)"
+        (deleteItemRequest)="deleteRecipeCategory($event)"
+        (nextPageRequest)="requestNextPage($event)"
+    >
+    </app-drawer-with-table>
+    <ng-container *ngIf="paginatedResponse.totalCount === 0">
+        <h2>
+            No recipe categories found. Click here to add new recipe category
+        </h2>
     </ng-container>
-    <ng-template #nodata>
-        <h2>No recipe categories found.</h2>
-    </ng-template>
 </ng-container>
 <ng-template #loading>
     <h2>Loading...</h2>

@@ -14,10 +14,7 @@ import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
 import { MatStepperModule } from '@angular/material/stepper';
-import {
-    CreateRecipeCategoryAPI,
-    RecipesCategoryService,
-} from 'src/app/recipe-category/recipe-category-service/recipe-category.service';
+import { RecipeCategoryService } from 'src/app/recipe-category/recipe-category-service/recipe-category.service';
 import { NewItemDialogComponent } from 'src/app/shared/new-item-dialog/new-item-dialog.component';
 import { InputControl } from 'src/app/shared/new-item-dialogs/new-recipe-dialog/new-recipe-dialog.component';
 
@@ -39,7 +36,7 @@ import { InputControl } from 'src/app/shared/new-item-dialogs/new-recipe-dialog/
     styleUrl: './new-recipe-category-dialog.component.scss',
 })
 export class NewRecipeCategoryDialogComponent implements OnInit {
-    categoryService = inject(RecipesCategoryService);
+    // categoryService = inject(RecipesCategoryService);
     fields: DialogFields = {};
     public dialogRef = inject(MatDialogRef<NewRecipeCategoryDialogComponent>);
     destroyRef = inject(DestroyRef);
@@ -55,13 +52,13 @@ export class NewRecipeCategoryDialogComponent implements OnInit {
     }
 
     addItem(): void {
-        const newRecipe: CreateRecipeCategoryAPI = {
-            name: this.categoryFormGroup
-                .get(this.controls[0].name)
-                ?.getRawValue(),
-        };
-        this.fields['name'] = newRecipe.name;
-        this.dialogRef.close(this.fields);
+        // const newRecipe: CreateRecipeCategoryAPI = {
+        //     name: this.categoryFormGroup
+        //         .get(this.controls[0].name)
+        //         ?.getRawValue(),
+        // };
+        // this.fields['name'] = newRecipe.name;
+        // this.dialogRef.close(this.fields);
         // this.categoryService.createCategory(newRecipe).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
         // 	alert('new category created');
         // 	this.dialogRef.close();

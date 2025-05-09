@@ -17,8 +17,15 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { hugeAdd02, hugeCancel02 } from '@ng-icons/huge-icons';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
+import { RecipeCategoryFormComponent } from 'src/app/recipe-category/recipe-category-form/recipe-category-form.component';
+import { ProductCategoryFormComponent } from 'src/app/product-category/product-category-form/product-category-form.component';
 
-export type FormType = 'tool' | 'product' | 'settings' | 'other';
+export type FormType =
+    | 'tool'
+    | 'product'
+    | 'recipeCategory'
+    | 'productCategory'
+    | 'other';
 
 @Component({
     selector: 'app-drawer-entity-builder',
@@ -54,7 +61,8 @@ export class DrawerEntityBuilderComponent<T> {
     private componentMap: Record<FormType, Type<any>> = {
         tool: ToolFormComponent,
         product: ProductFormComponent,
-        settings: ProductListComponent,
+        recipeCategory: RecipeCategoryFormComponent,
+        productCategory: ProductCategoryFormComponent,
         other: ProductListComponent,
     };
 

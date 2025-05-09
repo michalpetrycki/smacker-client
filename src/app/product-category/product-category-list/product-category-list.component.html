@@ -5,6 +5,7 @@
         [paginatedResponse]="paginatedResponse"
         [displayNameProperty]="displayNameProperty"
         [itemType]="'product category'"
+        [formType]="this.formType"
         [noItemsMessage]="'product categories'"
         (newItemRequest)="addProductCategory($event)"
         (updateItemRequest)="updateProductCategory($event)"
@@ -12,6 +13,11 @@
         (nextPageRequest)="requestNextPage($event)"
     >
     </app-drawer-with-table>
+    <ng-container *ngIf="paginatedResponse.totalCount === 0">
+        <h2>
+            No product categories found. Click here to add new product category
+        </h2>
+    </ng-container>
 </ng-container>
 <ng-template #loading>
     <h2>Loading...</h2>

@@ -48,12 +48,7 @@
             matTooltip="Proteins per 100g"
         />
     </mat-form-field>
-    <!-- <mat-form-field appearance="outline">
-        <mat-label>Product Categories</mat-label>
-        <input matInput type="text" formControlName="categories" />
-    </mat-form-field> -->
     <ng-template matStepLabel>Pick categories of the product</ng-template>
-
     <app-product-autocomplete
         [categoriesControl]="categoriesFormControl"
     ></app-product-autocomplete>

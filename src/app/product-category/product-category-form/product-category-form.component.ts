@@ -9,27 +9,27 @@ import {
     runInInjectionContext,
 } from '@angular/core';
 import {
-    FormControl,
-    FormGroup,
     ReactiveFormsModule,
+    FormGroup,
+    FormControl,
     Validators,
 } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { BehaviorSubject } from 'rxjs';
-import { ToolAPI } from 'src/app/shared/models/ToolAPI';
-import { ToolCreateAPI } from 'src/app/shared/models/ToolCreateAPI';
+import { ProductCategoryAPI } from 'src/app/shared/models/ProductCategoryAPI';
+import { ProductCategoryCreateAPI } from 'src/app/shared/models/ProductCategoryCreateAPI';
 
 @Component({
-    selector: 'app-tool-form',
+    selector: 'app-product-category-form',
     standalone: true,
     imports: [ReactiveFormsModule, MatInputModule],
-    templateUrl: './tool-form.component.html',
-    styleUrl: './tool-form.component.scss',
+    templateUrl: './product-category-form.component.html',
+    styleUrl: './product-category-form.component.scss',
 })
-export class ToolFormComponent {
+export class ProductCategoryFormComponent {
     private injector = inject(EnvironmentInjector);
-    data = input<ToolAPI>();
-    @Output() submitted = new EventEmitter<ToolCreateAPI>();
+    data = input<ProductCategoryAPI>();
+    @Output() submitted = new EventEmitter<ProductCategoryCreateAPI>();
     @Output() closeDrawer = new EventEmitter<void>();
 
     disableButton$ = new BehaviorSubject<boolean>(true);
@@ -43,8 +43,8 @@ export class ToolFormComponent {
 
     ngOnInit(): void {
         this.formGroup.valueChanges.subscribe((formValue) => {
-            const tool = this.data();
-            const x = formValue.name === tool?.name;
+            const category = this.data();
+            const x = formValue.name === category?.name;
             this.disableButton$.next(x);
         });
     }
@@ -52,19 +52,19 @@ export class ToolFormComponent {
     ngAfterViewInit(): void {
         runInInjectionContext(this.injector, () => {
             effect(() => {
-                const tool = this.data();
-                if (tool) {
-                    this.formGroup.get('name')?.patchValue(tool.name);
+                const category = this.data();
+                if (category) {
+                    this.formGroup.get('name')?.patchValue(category.name);
                 }
             });
         });
     }
 
     onSubmit(): void {
-        const tool: ToolCreateAPI = {
+        const category: ProductCategoryCreateAPI = {
             name: this.formGroup.get('name')?.value ?? '',
         };
-        this.submitted.emit(tool);
+        this.submitted.emit(category);
         this.onCancel();
     }
 

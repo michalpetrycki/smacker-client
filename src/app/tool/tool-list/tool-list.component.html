@@ -1,22 +1,21 @@
 <ng-container
     *ngIf="paginatedResponse$ | async as paginatedResponse; else loading"
 >
-    <ng-container *ngIf="paginatedResponse.totalCount > 0; else nodata">
-        <app-drawer-with-table
-            [paginatedResponse]="paginatedResponse"
-            [displayNameProperty]="displayNameProperty"
-            [itemType]="'tool'"
-            [noItemsMessage]="'tools'"
-            (newItemRequest)="addTool($event)"
-            (updateItemRequest)="updateTool($event)"
-            (deleteItemRequest)="deleteTool($event)"
-            (nextPageRequest)="requestNextPage($event)"
-        >
-        </app-drawer-with-table>
+    <app-drawer-with-table
+        [paginatedResponse]="paginatedResponse"
+        [displayNameProperty]="displayNameProperty"
+        [itemType]="'tool'"
+        [formType]="this.formType"
+        [noItemsMessage]="'tools'"
+        (newItemRequest)="addTool($event)"
+        (updateItemRequest)="updateTool($event)"
+        (deleteItemRequest)="deleteTool($event)"
+        (nextPageRequest)="requestNextPage($event)"
+    >
+    </app-drawer-with-table>
+    <ng-container *ngIf="paginatedResponse.totalCount === 0">
+        <h2>No tools found. Click here to add new tool</h2>
     </ng-container>
-    <ng-template #nodata>
-        <h2>No tools found.</h2>
-    </ng-template>
 </ng-container>
 <ng-template #loading>
     <h2>Loading...</h2>

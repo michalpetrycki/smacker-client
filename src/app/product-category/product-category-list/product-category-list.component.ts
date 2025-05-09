@@ -2,6 +2,7 @@ import { CommonModule, NgIf } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable, switchMap } from 'rxjs';
 import { ProductCategoryService } from 'src/app/product-category/product-category-service/product-category.service';
+import { FormType } from 'src/app/shared/drawer-entity-builder/drawer-entity-builder.component';
 import { DrawerWithTableComponent } from 'src/app/shared/drawer-with-table/drawer-with-table.component';
 import { PaginatedResponse } from 'src/app/shared/models/PaginatedResponse';
 import { ProductCategoryAPI } from 'src/app/shared/models/ProductCategoryAPI';
@@ -18,6 +19,7 @@ import { Pagination } from 'src/app/shared/simple-table/simple-table.component';
 })
 export class ProductCategoryListComponent {
     displayNameProperty = 'categoryName';
+    formType: FormType = 'productCategory';
     private productCategoryService = inject(ProductCategoryService);
     private snackbarService = inject(SnackbarService);
     private pagination$: BehaviorSubject<Pagination> =

@@ -1,5 +1,5 @@
 <div class="left-sidebar">
-    <mat-nav-list *ngIf="navItems$ | async as navItems">
+    <!-- <mat-nav-list *ngIf="navItems$ | async as navItems">
         @for (link of navItems; track link) {
         <a
             [routerLink]="'/category/' + link.route + '/recipes'"
@@ -12,7 +12,7 @@
         </a>
         <p (click)="removeCategory(link.route)" style="color: green">delete</p>
         }
-    </mat-nav-list>
+    </mat-nav-list> -->
 </div>
 <div>
     <button (click)="addCategory()">Add category</button>

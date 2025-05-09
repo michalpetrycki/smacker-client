@@ -14,6 +14,7 @@ import { ToolService } from 'src/app/tool/tool-service/tool.service';
 import { DrawerWithTableComponent } from '../../shared/drawer-with-table/drawer-with-table.component';
 import { Pagination } from 'src/app/shared/simple-table/simple-table.component';
 import { PaginatedResponse } from 'src/app/shared/models/PaginatedResponse';
+import { FormType } from 'src/app/shared/drawer-entity-builder/drawer-entity-builder.component';
 
 @Component({
     selector: 'app-tool-list',
@@ -23,7 +24,8 @@ import { PaginatedResponse } from 'src/app/shared/models/PaginatedResponse';
     styleUrl: './tool-list.component.scss',
 })
 export class ToolListComponent {
-    displayNameProperty = 'name';
+    displayNameProperty = 'toolName';
+    formType: FormType = 'tool';
     private toolsService = inject(ToolService);
     private snackbarService = inject(SnackbarService);
     private pagination$: BehaviorSubject<Pagination> =
