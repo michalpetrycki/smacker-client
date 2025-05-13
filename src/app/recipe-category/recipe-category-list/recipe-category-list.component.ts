@@ -25,7 +25,7 @@ import { RecipeCategoryAPI } from 'src/app/shared/models/RecipeCategoryAPI';
     styleUrl: './recipe-category-list.component.scss',
 })
 export class RecipeCategoryListComponent {
-    displayNameProperty = 'name';
+    displayNameProperty = 'categoryName';
     formType: FormType = 'recipeCategory';
     private recipeCategoryService = inject(RecipeCategoryService);
     private snackbarService = inject(SnackbarService);
@@ -34,7 +34,7 @@ export class RecipeCategoryListComponent {
             pageNo: 0,
             pageSize: 5,
             sortDirection: 'asc',
-            sortBy: 'name',
+            sortBy: 'categoryName',
         });
 
     refresh$: BehaviorSubject<void> = new BehaviorSubject<void>(undefined);
