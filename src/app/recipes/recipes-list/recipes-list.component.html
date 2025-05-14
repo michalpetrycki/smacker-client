@@ -1,4 +1,4 @@
-<button mat-flat-button color="primary" (click)="addNewRecipe()">
+<!-- <button mat-flat-button color="primary" (click)="addNewRecipe()">
     <mat-icon>add</mat-icon>Add recipe
 </button>
 
@@ -11,9 +11,30 @@
         </div>
     </ng-container>
     <ng-template #nodata>
-        <!-- <h2>No recipes in category <span *ngIf="category$ | async as category">{{category.name}}</span></h2> -->
+        <h2>No recipes in category <span *ngIf="category$ | async as category">{{category.name}}</span></h2>
     </ng-template>
 </ng-container>
 <ng-template #loading>
     <h2>Loading...</h2>
-</ng-template>
+</ng-template> -->
+<div
+    class="recipes-grid"
+    infiniteScroll
+    [infiniteScrollDistance]="2"
+    [infiniteScrollThrottle]="150"
+    (scrolled)="loadMore()"
+>
+    <div
+        class="recipe-card"
+        *ngFor="let recipe of recipes"
+        [routerLink]="['/przepis', recipe.id]"
+    >
+        <img [src]="recipe.image" [alt]="recipe.title" />
+        <h3>{{ recipe.title }}</h3>
+        <p>{{ recipe.description }}</p>
+        <span>{{ recipe.kcal }} kcal / 100g</span>
+    </div>
+</div>
+
+<div *ngIf="loading" class="loading-spinner" Loading...></div>
+<div *ngIf="noMoreData" class="end-message">That's all doc!</div>
